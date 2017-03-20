@@ -1,0 +1,36 @@
+11.24 Requirements workflow for ChocAn
+- Use case diagram
+- Description of all use cases
+
+12.20 Specification document for ChocAn
+- Functional and non-functional requirements
+
+12.21 Software Project Management Plan
+- Budget, staffing requirements and detailed schedule
+- Pg. 307 of our pirated ebook
+- Skip certain sections
+
+13.22 Analysis workflow
+- Entity Relationship diagram
+- Use case scenarios
+- State chart
+- CRC
+
+14.16 Using specification document and analysis workflow, design the product
+- Data Flow Analysis
+- Detailed design of each module in DFA
+- Class diagram
+- Collaboration diagram
+- Sequence diagram equivalent to collaboration diagram
+
+15.33 Draw blackbox test cases
+- Black box test cases (from doc)
+
+15.34 Implement and integrate the ChocAn product. Test it too.
+
+-----
+
+Graphics:
+Icon
+Header
+(button icons)
