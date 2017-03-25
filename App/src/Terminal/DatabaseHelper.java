@@ -30,8 +30,8 @@ import java.util.logging.Logger;
 public class DatabaseHelper 
 {
     String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-    String JDBC_CLASSPATH = "D:\\java web\\ChocAn\\App\\lib\\CopyLibs\\derby.jar";
-    String DB_URL = "jdbc:derby:D:\\java web\\ChocAn\\App\\Database\\ChocAnDB";
+    String JDBC_CLASSPATH = "App\\lib\\CopyLibs\\derby.jar";
+    String DB_URL = "App\\Database\\ChocAnDB";
     
     private String USER = "";
     private String PASS = "";
@@ -81,7 +81,7 @@ public class DatabaseHelper
         try 
         {
             String sql;
-            sql = "SELECT * FROM table_name";
+            sql = "SELECT * FROM Provider";
             ResultSet rs = stmt.executeQuery(sql); // DML
           
             while(rs.next())
@@ -97,6 +97,7 @@ public class DatabaseHelper
         {
             Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
     }
     
 }
