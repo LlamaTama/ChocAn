@@ -19,7 +19,6 @@ package Terminal;
 
 import javax.swing.*;
 import java.awt.event.*;
-import java.util.Arrays;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -50,7 +49,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         setLayout(new MigLayout("fillx, align center center"));
         
         //Creating and adding components to frame
-        initialiseComponents();
+        initializeComponents();
         addComponents();
         
         //Frame constraints
@@ -62,7 +61,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         setVisible(true);
     }
     
-    private void initialiseComponents()
+    private void initializeComponents()
     {
         idTextField = new JTextField();
         passwordField = new JPasswordField();
@@ -129,11 +128,7 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private boolean validateID()
     {
-        if(idTextField.getText().matches("\\d\\d\\d\\d\\d\\d\\d\\d\\d"))
-        {
-            return true;
-        }
-        return false;
+        return idTextField.getText().matches("\\d\\d\\d\\d\\d\\d\\d\\d\\d");
     }
     
     private void validateUser()
@@ -146,11 +141,19 @@ public class LoginTerminal extends JFrame implements ActionListener
         dbHelper.open();
         if(dbHelper.checkUser(sql))
         {
-            JOptionPane.showMessageDialog(this, "Success", "Yay!", JOptionPane.INFORMATION_MESSAGE);
+            if(providerTypeRadioButton.isSelected())
+            {
+                ProviderTerminal.createProviderTerminal();
+            }
+            else
+            {
+                ManagerTerminal.createManagerTerminal();
+            }
+            
         }
         else
         {
-            JOptionPane.showMessageDialog(this, "Failure", "Boo!", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Invalid credentials!", "Error", JOptionPane.ERROR_MESSAGE);
         }
         dbHelper.close();
     }

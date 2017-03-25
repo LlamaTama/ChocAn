@@ -17,6 +17,7 @@
 package Terminal;
 import javax.swing.*;
 import java.awt.event.*;
+import net.miginfocom.swing.MigLayout;
 /**
  *
  * @author vishc
@@ -24,6 +25,30 @@ import java.awt.event.*;
 public class ManagerTerminal extends JFrame implements ActionListener
 {
     private ManagerTerminal()
+    {
+        //Calling super class constructor and setting layout constraints
+        super();
+        setLayout(new MigLayout("fillx, align center center"));
+        
+        //Creating and adding components to frame
+        initializeComponents();
+        addComponents();
+        
+        //Frame constraints
+        setSize(400, 180);
+        setTitle("Manager");
+        setResizable(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+    
+    private void initializeComponents()
+    {
+        
+    }
+    
+    private void addComponents()
     {
         
     }
