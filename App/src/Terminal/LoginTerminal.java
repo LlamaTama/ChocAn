@@ -17,23 +17,90 @@
 
 package Terminal;
 
+import javax.swing.*;
+import java.awt.event.*;
+import net.miginfocom.swing.MigLayout;
+
 /**
  *
  * @author Tanesh Manjrekar
  */
-public class LoginTerminal 
+public class LoginTerminal extends JFrame implements ActionListener
 {
+    private JTextField idTextField;
+    private JPasswordField passwordField;
+    private JLabel idLabel,
+            passwordLabel;
+    private ButtonGroup userType;
+    private JRadioButton providerTypeRadioButton, 
+            managerTypeRadioButton;
+    private JButton loginButton;
+    
     /*
     Making the constructor private and using a static method for creation of the terminal, 
     to ensure that at any given moment, there's only one instance of the Login Terminal
     */
     private LoginTerminal()
     {
+        //Calling super class constructor and setting layout constraints
+        super();
+        setLayout(new MigLayout("fillx, align center center"));
+        
+        //Creating and adding components to frame
+        initialiseComponents();
+        addComponents();
+        
+        //Frame constraints
+        setSize(400, 180);
+        setTitle("Login");
+        setResizable(true);
+        setLocationRelativeTo(null);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+    
+    private void initialiseComponents()
+    {
+        idTextField = new JTextField();
+        passwordField = new JPasswordField();
+        
+        idLabel = new JLabel("ID");
+        passwordLabel = new JLabel("Password");
+        
+        providerTypeRadioButton = new JRadioButton("Provider");
+        providerTypeRadioButton.setSelected(true);
+        managerTypeRadioButton = new JRadioButton("Manager");
+        userType = new ButtonGroup();
+        userType.add(providerTypeRadioButton);
+        userType.add(managerTypeRadioButton);
+        
+        loginButton = new JButton("Login");
+        loginButton.addActionListener(this);
+    }
+    
+    private void addComponents()
+    {
+        add(idLabel);
+        add(idTextField, "wrap, grow");
+        add(passwordLabel);
+        add(passwordField, "wrap, grow");
+        add(providerTypeRadioButton, "split 2, span 2, align center");
+        add(managerTypeRadioButton, "wrap");
+        add(loginButton, "span 2, align center");
         
     }
     
     public static void createLoginTerminal()
     {
         LoginTerminal lt = new LoginTerminal();
+    }
+    
+    @Override
+    public void actionPerformed(ActionEvent ae)
+    {
+        if(ae.getSource().equals(loginButton))
+        {
+            
+        }
     }
 }
