@@ -15,7 +15,6 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Terminal;
-
 import javax.swing.*;
 import java.awt.event.*;
 /**
