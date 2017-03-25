@@ -29,10 +29,11 @@ import java.util.logging.Logger;
  */
 public class DatabaseHelper 
 {
+    // JDBC driver name and database URL
     String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-    String JDBC_CLASSPATH = "App\\lib\\CopyLibs\\derby.jar";
-    String DB_URL = "App\\Database\\ChocAnDB";
+    String DB_URL = "jdbc:derby:Database\\ChocAnDB";
     
+    //  Database credentials
     private String USER = "";
     private String PASS = "";
     
@@ -43,7 +44,8 @@ public class DatabaseHelper
     {
         try 
         {
-            Class.forName("JDBC_DRIVER");
+            //  Register JDBC driver
+            Class.forName(JDBC_DRIVER);
         } 
         catch(Exception e) 
         {
@@ -55,6 +57,7 @@ public class DatabaseHelper
     {
         try 
         {
+            //  Connecting to database
             conn = DriverManager.getConnection(DB_URL, USER,PASS);
             stmt = conn.createStatement();
         } 
@@ -82,8 +85,9 @@ public class DatabaseHelper
         {
             String sql;
             sql = "SELECT * FROM Provider";
-            ResultSet rs = stmt.executeQuery(sql); // DML
+            ResultSet rs = stmt.executeQuery(sql);
           
+            //  Getting data from result set
             while(rs.next())
             {
               
