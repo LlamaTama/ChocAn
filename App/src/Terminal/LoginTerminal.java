@@ -19,6 +19,7 @@ package Terminal;
 
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.Arrays;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -35,6 +36,8 @@ public class LoginTerminal extends JFrame implements ActionListener
     private JRadioButton providerTypeRadioButton, 
             managerTypeRadioButton;
     private JButton loginButton;
+    
+    private String tableName = "APP.PROVIDER";
     
     /*
     Making the constructor private and using a static method for creation of the terminal, 
@@ -105,6 +108,17 @@ public class LoginTerminal extends JFrame implements ActionListener
             {
                 //Testing validation
                 //JOptionPane.showMessageDialog(this, "Success", "Yay!", JOptionPane.INFORMATION_MESSAGE);
+                
+                if(providerTypeRadioButton.isSelected())
+                {
+                    tableName = "APP.PROVIDER";
+                }
+                else
+                {
+                    tableName = "APP.MANAGER";
+                }
+                
+                validateUser();
             }
             else
             {
@@ -120,5 +134,24 @@ public class LoginTerminal extends JFrame implements ActionListener
             return true;
         }
         return false;
+    }
+    
+    private void validateUser()
+    {
+        String id = idTextField.getText();
+        String pw = new String(passwordField.getPassword());
+        String sql = "select * from " + tableName + " where id=" + id + " and pass='" + pw + "'";
+        
+        DatabaseHelper dbHelper = new DatabaseHelper();
+        dbHelper.open();
+        if(dbHelper.checkUser(sql))
+        {
+            JOptionPane.showMessageDialog(this, "Success", "Yay!", JOptionPane.INFORMATION_MESSAGE);
+        }
+        else
+        {
+            JOptionPane.showMessageDialog(this, "Failure", "Boo!", JOptionPane.ERROR_MESSAGE);
+        }
+        dbHelper.close();
     }
 }

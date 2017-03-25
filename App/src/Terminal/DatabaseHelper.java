@@ -37,8 +37,8 @@ public class DatabaseHelper
     private String USER = "";
     private String PASS = "";
     
-    private Connection conn = null;
-    private Statement stmt = null;
+    private Connection conn;
+    private Statement stmt;
      
     public DatabaseHelper()
     {
@@ -58,7 +58,7 @@ public class DatabaseHelper
         try 
         {
             //  Connecting to database
-            conn = DriverManager.getConnection(DB_URL, USER,PASS);
+            conn = DriverManager.getConnection(DB_URL);
             stmt = conn.createStatement();
         } 
         catch (SQLException ex) 
@@ -79,20 +79,18 @@ public class DatabaseHelper
         }
     }
     
-     public void test() 
+     public boolean checkUser(String sql) 
      {
         try 
         {
-            String sql;
-            sql = "SELECT * FROM Provider";
             ResultSet rs = stmt.executeQuery(sql);
           
             //  Getting data from result set
             while(rs.next())
             {
-              
-                System.out.print(rs.getString(1));
-                System.out.print(rs.getString(2));
+                //System.out.println(rs.getInt(1));
+                //System.out.println(rs.getString(2));
+                return true;
             }
           
             rs.close();
@@ -102,6 +100,7 @@ public class DatabaseHelper
             Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-    }
+        return false;
+     }
     
 }

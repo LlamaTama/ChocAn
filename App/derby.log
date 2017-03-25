@@ -1,0 +1,13 @@
+----------------------------------------------------------------
+Fri Mar 24 23:10:05 PDT 2017:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.13.1.1 - (1765088): instance a816c00e-015b-0416-0b03-00000a78c0a8 
+on database directory C:\Users\tanes\Documents\NetBeansProjects\ChocAn\App\Database\ChocAnDB with class loader sun.misc.Launcher$AppClassLoader@4e25154f 
+Loaded from file:/C:/Users/tanes/Documents/NetBeansProjects/ChocAn/App/lib/Derby/derby.jar
+java.vendor=Oracle Corporation
+java.runtime.version=1.8.0_101-b13
+user.dir=C:\Users\tanes\Documents\NetBeansProjects\ChocAn\App
+os.name=Windows 10
+os.arch=amd64
+os.version=10.0
+derby.system.home=null
+Database Class Loader started - derby.database.classpath=''
