@@ -21,19 +21,10 @@ package Terminal;
  *
  * @author Tanesh Manjrekar
  */
-public class LoginTerminal 
+public class Initializer 
 {
-    /*
-    Making the constructor private and using a static method for creation of the terminal, 
-    to ensure that at any given moment, there's only one instance of the Login Terminal
-    */
-    private LoginTerminal()
+    public static void main(String args[])
     {
-        
-    }
-    
-    public static void createLoginTerminal()
-    {
-        LoginTerminal lt = new LoginTerminal();
+        LoginTerminal.createLoginTerminal();
     }
 }
