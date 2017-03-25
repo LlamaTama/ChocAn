@@ -80,6 +80,7 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private void addComponents()
     {
+        //Adding components with MigLayout constraints
         add(idLabel);
         add(idTextField, "wrap, grow");
         add(passwordLabel);
@@ -100,7 +101,24 @@ public class LoginTerminal extends JFrame implements ActionListener
     {
         if(ae.getSource().equals(loginButton))
         {
-            
+            if(validateID())
+            {
+                //Testing validation
+                //JOptionPane.showMessageDialog(this, "Success", "Yay!", JOptionPane.INFORMATION_MESSAGE);
+            }
+            else
+            {
+                JOptionPane.showMessageDialog(this, "ID must be 9 digits only!", "ID Error!", JOptionPane.ERROR_MESSAGE);
+            }
         }
+    }
+    
+    private boolean validateID()
+    {
+        if(idTextField.getText().matches("\\d\\d\\d\\d\\d\\d\\d\\d\\d"))
+        {
+            return true;
+        }
+        return false;
     }
 }
