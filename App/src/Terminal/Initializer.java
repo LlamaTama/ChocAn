@@ -25,6 +25,12 @@ public class Initializer
 {
     public static void main(String args[])
     {
+        displaySplashScreen();
         LoginTerminal.createLoginTerminal();
+    }
+    
+    private static void displaySplashScreen()
+    {
+        
     }
 }
