@@ -17,12 +17,16 @@
 
 package Terminal;
 
+import java.awt.Font;
+
 /**
  *
  * @author Tanesh Manjrekar
  */
 public class Initializer 
 {
+    private static Font defaultFont = new Font("DejaVu Sans", Font.PLAIN, 22);
+    
     public static void main(String args[])
     {
         displaySplashScreen();
@@ -32,5 +36,10 @@ public class Initializer
     private static void displaySplashScreen()
     {
         
+    }
+    
+    public static Font getDefaultFont()
+    {
+        return defaultFont;
     }
 }

@@ -38,14 +38,14 @@ public class ManagerTerminal extends JFrame implements ActionListener
         wrap 1 - goes to next line after every 1 component
         gapy 10 - 10 unit vertical gap between components
         */
-        setLayout(new MigLayout("fillx, align center center, wrap 1, gapy 10"));
+        setLayout(new MigLayout("fillx, align center center, wrap 1, gapy 15"));
         
         //Creating and adding components to frame
         initializeComponents();
         addComponents();
         
         //Frame constraints
-        setSize(400, 180);
+        setSize(400, 250);
         setTitle("Manager");
         setResizable(true);
         setLocationRelativeTo(null); //centers frame on screen
@@ -57,10 +57,13 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         viewMemberReportButton = new JButton("View Member Report");
         viewMemberReportButton.addActionListener(this);
+        viewMemberReportButton.setFont(Initializer.getDefaultFont());
         viewProviderReportButton = new JButton("View Provider Report");
         viewProviderReportButton.addActionListener(this);
+        viewProviderReportButton.setFont(Initializer.getDefaultFont());
         viewSummaryReportButton = new JButton("View Summary Report");
         viewSummaryReportButton.addActionListener(this);
+        viewSummaryReportButton.setFont(Initializer.getDefaultFont());
     }
     
     private void addComponents()
