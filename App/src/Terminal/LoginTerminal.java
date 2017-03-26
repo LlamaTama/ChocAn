@@ -20,7 +20,6 @@ package Terminal;
 import javax.swing.*;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
-import java.awt.Font;
 
 /**
  *
@@ -59,7 +58,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         addComponents();
         
         //Frame constraints
-        setSize(500, 258);
+        setSize(500, 250);
         setTitle("Login");
         setResizable(true);
         setLocationRelativeTo(null); //centers frame on screen
@@ -68,32 +67,29 @@ public class LoginTerminal extends JFrame implements ActionListener
     }
     
     private void initializeComponents()
-    {
-         // font size and style for labels
-        Font font1 = new Font("DejaVu Sans", Font.PLAIN, 22);
-        
+    {   
         idTextField = new JTextField();
         passwordField = new JPasswordField();
-        idTextField.setFont(font1);
-        passwordField.setFont(font1);
+        idTextField.setFont(Initializer.getDefaultFont());
+        passwordField.setFont(Initializer.getDefaultFont());
        
         idLabel = new JLabel("ID");
-        idLabel.setFont(font1);
+        idLabel.setFont(Initializer.getDefaultFont());
         passwordLabel = new JLabel("Password");
-        passwordLabel.setFont(font1);
+        passwordLabel.setFont(Initializer.getDefaultFont());
         
         providerTypeRadioButton = new JRadioButton("Provider");
-        providerTypeRadioButton.setFont(font1);
+        providerTypeRadioButton.setFont(Initializer.getDefaultFont());
         providerTypeRadioButton.setSelected(true);
         managerTypeRadioButton = new JRadioButton("Manager");
-        managerTypeRadioButton.setFont(font1);
+        managerTypeRadioButton.setFont(Initializer.getDefaultFont());
         userType = new ButtonGroup();
         userType.add(providerTypeRadioButton);
         userType.add(managerTypeRadioButton);
         
         loginButton = new JButton("Login");
-        loginButton.setFont(font1);
         loginButton.addActionListener(this);
+        loginButton.setFont(Initializer.getDefaultFont());
     }
     
     private void addComponents()
@@ -104,15 +100,15 @@ public class LoginTerminal extends JFrame implements ActionListener
         split 2 - ensures 2 components (this one and next) are in the same cell
         span 2 - makes the cell span 2 cell spaces horizontally
         align center - centers the component
+        gapy 2 - sets vertical gaps (before and after) of component to 2
         */
         add(idLabel);
         add(idTextField, "wrap, grow");
         add(passwordLabel);
         add(passwordField, "wrap, grow");
-        add(providerTypeRadioButton, "split 2, span 2, align center,gapy 0.4cm");
+        add(providerTypeRadioButton, "split 2, span 2, align center, gapy 2");
         add(managerTypeRadioButton, "wrap,");
-        add(loginButton, "span 2, align center,gapy 0.4cm,gapafter 0.4cm");
-        
+        add(loginButton, "span 2, align center, gapy 1");
     }
     
     public static void createLoginTerminal()
@@ -165,6 +161,8 @@ public class LoginTerminal extends JFrame implements ActionListener
         dbHelper.open();
         if(dbHelper.checkUser(sql))
         {
+            setVisible(false);
+            
             if(providerTypeRadioButton.isSelected())
             {
                 ProviderTerminal.createProviderTerminal();
@@ -174,6 +172,7 @@ public class LoginTerminal extends JFrame implements ActionListener
                 ManagerTerminal.createManagerTerminal();
             }
             
+            dispose();
         }
         else
         {
