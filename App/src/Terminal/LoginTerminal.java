@@ -106,7 +106,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         add(idTextField, "wrap, grow");
         add(passwordLabel);
         add(passwordField, "wrap, grow");
-        add(providerTypeRadioButton, "split 2, span 2, align center,gapy 0.5cm");
+        add(providerTypeRadioButton, "split 2, span 2, align center,gapy 0.4cm");
         add(managerTypeRadioButton, "wrap,");
         add(loginButton, "span 2, align center,gapy 0.4cm,gapafter 0.4cm");
         
