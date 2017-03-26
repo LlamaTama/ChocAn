@@ -69,11 +69,14 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private void initializeComponents()
     {
-        idTextField = new JTextField();
-        passwordField = new JPasswordField();
-        
+         // font size and style for labels
         Font font1 = new Font("DejaVu Sans", Font.PLAIN, 22);
         
+        idTextField = new JTextField();
+        passwordField = new JPasswordField();
+        idTextField.setFont(font1);
+        passwordField.setFont(font1);
+       
         idLabel = new JLabel("ID");
         idLabel.setFont(font1);
         passwordLabel = new JLabel("Password");
