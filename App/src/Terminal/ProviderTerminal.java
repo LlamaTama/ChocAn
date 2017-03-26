@@ -19,6 +19,7 @@ package Terminal;
 
 import javax.swing.*;
 import java.awt.event.*;
+import net.miginfocom.swing.MigLayout;
 
 /**
  *
@@ -26,7 +27,60 @@ import java.awt.event.*;
  */
 public class ProviderTerminal extends JFrame implements ActionListener
 {
+    private JPanel operationChoicePanel, 
+            memberOperationPanel;
+    private JButton memberOperationButton,
+            generateProviderDirectoryButton,
+            backToOperationChoiceButton,
+            selectDateButton,
+            submitDetailsButton;
+    private JTextField memberNumberTextField,
+            serviceCodeTextField,
+            commentsTextField;
+    private JLabel memberNumberLabel,
+            dateOfServiceLabel,
+            serviceCodeLabel,
+            commentsLabel;
+    
     private ProviderTerminal()
+    {
+        //Calling super class constructor and setting layout constraints
+        super();
+        /*
+        fillx - allows component to fill the space provided horizontally
+        align center center - aligns components horizontally and vertically
+        */
+        setLayout(new MigLayout("fillx, align center center"));
+        
+        //Creating and adding components to frame
+        initializeOperationChoiceComponents();
+        addOperationChoiceComponents();
+        
+        //Frame constraints
+        setSize(400, 180);
+        setTitle("Provider");
+        setResizable(true);
+        setLocationRelativeTo(null); //centers frame on screen
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+    
+    private void initializeOperationChoiceComponents()
+    {
+        
+    }
+    
+    private void initializeMemberOperationComponents()
+    {
+        
+    }
+    
+    private void addOperationChoiceComponents()
+    {
+        
+    }
+    
+    private void addMemberOperationComponents()
     {
         
     }
