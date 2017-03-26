@@ -20,6 +20,7 @@ package Terminal;
 import javax.swing.*;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
+import java.awt.Font;
 
 /**
  *
@@ -58,7 +59,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         addComponents();
         
         //Frame constraints
-        setSize(400, 180);
+        setSize(500, 258);
         setTitle("Login");
         setResizable(true);
         setLocationRelativeTo(null); //centers frame on screen
@@ -68,20 +69,30 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private void initializeComponents()
     {
+         // font size and style for labels
+        Font font1 = new Font("DejaVu Sans", Font.PLAIN, 22);
+        
         idTextField = new JTextField();
         passwordField = new JPasswordField();
-        
+        idTextField.setFont(font1);
+        passwordField.setFont(font1);
+       
         idLabel = new JLabel("ID");
+        idLabel.setFont(font1);
         passwordLabel = new JLabel("Password");
+        passwordLabel.setFont(font1);
         
         providerTypeRadioButton = new JRadioButton("Provider");
+        providerTypeRadioButton.setFont(font1);
         providerTypeRadioButton.setSelected(true);
         managerTypeRadioButton = new JRadioButton("Manager");
+        managerTypeRadioButton.setFont(font1);
         userType = new ButtonGroup();
         userType.add(providerTypeRadioButton);
         userType.add(managerTypeRadioButton);
         
         loginButton = new JButton("Login");
+        loginButton.setFont(font1);
         loginButton.addActionListener(this);
     }
     
@@ -98,9 +109,9 @@ public class LoginTerminal extends JFrame implements ActionListener
         add(idTextField, "wrap, grow");
         add(passwordLabel);
         add(passwordField, "wrap, grow");
-        add(providerTypeRadioButton, "split 2, span 2, align center");
-        add(managerTypeRadioButton, "wrap");
-        add(loginButton, "span 2, align center");
+        add(providerTypeRadioButton, "split 2, span 2, align center,gapy 0.4cm");
+        add(managerTypeRadioButton, "wrap,");
+        add(loginButton, "span 2, align center,gapy 0.4cm,gapafter 0.4cm");
         
     }
     
