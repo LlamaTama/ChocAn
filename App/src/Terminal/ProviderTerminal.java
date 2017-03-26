@@ -18,6 +18,7 @@
 package Terminal;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 import net.miginfocom.swing.MigLayout;
 
@@ -27,19 +28,23 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ProviderTerminal extends JFrame implements ActionListener
 {
-    private JPanel operationChoicePanel, 
+    private CardLayout mainPanelLayout;
+    private JPanel mainPanel,
+            operationChoicePanel, 
             memberOperationPanel;
     private JButton memberOperationButton,
             generateProviderDirectoryButton,
             backToOperationChoiceButton,
             selectDateButton,
             submitDetailsButton;
-    private JTextField memberNumberTextField,
-            serviceCodeTextField,
-            commentsTextField;
-    private JLabel memberNumberLabel,
+    private JTextField memberIDTextField,
+            dateOfServiceTextField,
+            serviceCodeTextField;
+    private JTextArea commentsTextArea;
+    private JLabel memberIDLabel,
             dateOfServiceLabel,
             serviceCodeLabel,
+            serviceNameLabel,
             commentsLabel;
     
     private ProviderTerminal()
@@ -50,11 +55,10 @@ public class ProviderTerminal extends JFrame implements ActionListener
         fillx - allows component to fill the space provided horizontally
         align center center - aligns components horizontally and vertically
         */
-        setLayout(new MigLayout("fillx, align center center"));
+        setLayout(new MigLayout("fill, align center center"));
         
-        //Creating and adding components to frame
-        initializeOperationChoiceComponents();
-        addOperationChoiceComponents();
+        initializeComponents();
+        addComponents();
         
         //Frame constraints
         setSize(400, 180);
@@ -65,19 +69,71 @@ public class ProviderTerminal extends JFrame implements ActionListener
         setVisible(true);
     }
     
+    private void initializeComponents()
+    {   
+        mainPanelLayout = new CardLayout();
+        mainPanel = new JPanel(mainPanelLayout);
+        /*
+        fillx - allows component to fill the space provided horizontally
+        align center center - aligns components horizontally and vertically
+        wrap 1 - goes to next line after every 1 component
+        gapy 15 - 15 unit vertical gap between components
+        */
+        operationChoicePanel = new JPanel(new MigLayout("fillx, align center center, wrap 1, gapy 15"));
+        initializeOperationChoiceComponents();
+        memberOperationPanel = new JPanel(new MigLayout("fillx"));
+        initializeMemberOperationComponents();
+    }
+    
     private void initializeOperationChoiceComponents()
     {
-        
+        memberOperationButton = new JButton("Member Billing");
+        memberOperationButton.setFont(Initializer.getDefaultFont());
+        memberOperationButton.addActionListener(this);
+        generateProviderDirectoryButton = new JButton("Generate Provider Directory");
+        generateProviderDirectoryButton.setFont(Initializer.getDefaultFont());
+        generateProviderDirectoryButton.addActionListener(this);
     }
     
     private void initializeMemberOperationComponents()
     {
+        memberIDLabel = new JLabel("Member ID");
+        dateOfServiceLabel = new JLabel("Date of Service");
+        serviceCodeLabel = new JLabel("Service Code");
+        serviceNameLabel = new JLabel();
+        commentsLabel = new JLabel("Comments");
         
+        memberIDTextField = new JTextField();
+        dateOfServiceTextField = new JTextField();
+        serviceCodeTextField = new JTextField();
+        commentsTextArea = new JTextArea();
+        
+        backToOperationChoiceButton = new JButton("Back");
+        backToOperationChoiceButton.setFont(Initializer.getDefaultFont());
+        backToOperationChoiceButton.addActionListener(this);
+        selectDateButton = new JButton("Select date");
+        selectDateButton.setFont(Initializer.getDefaultFont());
+        selectDateButton.addActionListener(this);
+        submitDetailsButton = new JButton("Submit");
+        submitDetailsButton.setFont(Initializer.getDefaultFont());
+        submitDetailsButton.addActionListener(this);
+    }
+    
+    private void addComponents()
+    {
+        addOperationChoiceComponents();
+        mainPanel.add(operationChoicePanel, "Choice");
+        addMemberOperationComponents();
+        mainPanel.add(memberOperationPanel, "Billing");
+        mainPanelLayout.show(mainPanel, "Choice");
+        
+        add(mainPanel, "grow");
     }
     
     private void addOperationChoiceComponents()
     {
-        
+        operationChoicePanel.add(memberOperationButton, "grow");
+        operationChoicePanel.add(generateProviderDirectoryButton, "grow");
     }
     
     private void addMemberOperationComponents()
@@ -93,6 +149,28 @@ public class ProviderTerminal extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae)
     {
-        
+        if(ae.getSource().equals(memberOperationButton))
+        {
+            mainPanelLayout.show(mainPanel,"Billing");
+            pack();
+            setSize(getPreferredSize());
+        }
+        else if(ae.getSource().equals(generateProviderDirectoryButton))
+        {
+            mainPanelLayout.show(mainPanel, "Choice");
+            setSize(400, 180);
+        }
+        else if(ae.getSource().equals(backToOperationChoiceButton))
+        {
+            
+        }
+        else if(ae.getSource().equals(selectDateButton))
+        {
+            
+        }
+        else if(ae.getSource().equals(submitDetailsButton))
+        {
+            
+        }
     }
 }
