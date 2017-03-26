@@ -30,12 +30,12 @@ import java.util.logging.Logger;
 public class DatabaseHelper 
 {
     // JDBC driver name and database URL
-    String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-    String DB_URL = "jdbc:derby:Database\\ChocAnDB";
+    private static final String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    private static final String DB_URL = "jdbc:derby:Database\\ChocAnDB";
     
     //  Database credentials
-    private String USER = "";
-    private String PASS = "";
+    private static final String USER = "";
+    private static String PASS = "";
     
     private Connection conn;
     private Statement stmt;
