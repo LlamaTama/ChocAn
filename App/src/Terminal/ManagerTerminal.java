@@ -17,15 +17,60 @@
 package Terminal;
 import javax.swing.*;
 import java.awt.event.*;
+import net.miginfocom.swing.MigLayout;
 /**
  *
  * @author vishc
  */
 public class ManagerTerminal extends JFrame implements ActionListener
 {
+    private JButton viewMemberReportButton,
+            viewProviderReportButton,
+            viewSummaryReportButton;
+    
     private ManagerTerminal()
     {
+        //Calling super class constructor and setting layout constraints
+        super();
+        /*
+        fillx - allows component to fill the space provided horizontally
+        align center center - aligns components horizontally and vertically
+        wrap 1 - goes to next line after every 1 component
+        gapy 10 - 10 unit vertical gap between components
+        */
+        setLayout(new MigLayout("fillx, align center center, wrap 1, gapy 10"));
         
+        //Creating and adding components to frame
+        initializeComponents();
+        addComponents();
+        
+        //Frame constraints
+        setSize(400, 180);
+        setTitle("Manager");
+        setResizable(true);
+        setLocationRelativeTo(null); //centers frame on screen
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setVisible(true);
+    }
+    
+    private void initializeComponents()
+    {
+        viewMemberReportButton = new JButton("View Member Report");
+        viewMemberReportButton.addActionListener(this);
+        viewProviderReportButton = new JButton("View Provider Report");
+        viewProviderReportButton.addActionListener(this);
+        viewSummaryReportButton = new JButton("View Summary Report");
+        viewSummaryReportButton.addActionListener(this);
+    }
+    
+    private void addComponents()
+    {
+        /*
+        grow - expand to fill available space
+        */
+        add(viewMemberReportButton, "grow");
+        add(viewProviderReportButton, "grow");
+        add(viewSummaryReportButton, "grow");
     }
     
     public static void createManagerTerminal()
@@ -36,6 +81,17 @@ public class ManagerTerminal extends JFrame implements ActionListener
     @Override
     public void actionPerformed(ActionEvent ae)
     {
-        
+        if(ae.getSource().equals(viewMemberReportButton))
+        {
+            
+        }
+        else if(ae.getSource().equals(viewProviderReportButton))
+        {
+            
+        }
+        else if(ae.getSource().equals(viewSummaryReportButton))
+        {
+            
+        }
     }
 }
