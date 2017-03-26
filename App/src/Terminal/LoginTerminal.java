@@ -46,6 +46,11 @@ public class LoginTerminal extends JFrame implements ActionListener
     {
         //Calling super class constructor and setting layout constraints
         super();
+        
+        /*
+        fillx - allows component to fill the space provided horizontally
+        align center center - aligns components horizontally and vertically
+        */
         setLayout(new MigLayout("fillx, align center center"));
         
         //Creating and adding components to frame
@@ -56,7 +61,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         setSize(400, 180);
         setTitle("Login");
         setResizable(true);
-        setLocationRelativeTo(null);
+        setLocationRelativeTo(null); //centers frame on screen
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
     }
@@ -82,7 +87,13 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private void addComponents()
     {
-        //Adding components with MigLayout constraints
+        /*
+        wrap - go to next line after this
+        grow - expand to fill available space
+        split 2 - ensures 2 components (this one and next) are in the same cell
+        span 2 - makes the cell span 2 cell spaces horizontally
+        align center - centers the component
+        */
         add(idLabel);
         add(idTextField, "wrap, grow");
         add(passwordLabel);
@@ -128,6 +139,7 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private boolean validateID()
     {
+        //Regex for 9 digit ID
         return idTextField.getText().matches("\\d\\d\\d\\d\\d\\d\\d\\d\\d");
     }
     
@@ -137,6 +149,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         String pw = new String(passwordField.getPassword());
         String sql = "select * from " + tableName + " where id=" + id + " and pass='" + pw + "'";
         
+        //Creating helper object to access database
         DatabaseHelper dbHelper = new DatabaseHelper();
         dbHelper.open();
         if(dbHelper.checkUser(sql))
