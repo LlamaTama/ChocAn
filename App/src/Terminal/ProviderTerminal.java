@@ -18,10 +18,11 @@
 package Terminal;
 
 import External.DocumentSizeFilter;
+import com.toedter.calendar.JDateChooser;
+import com.toedter.calendar.JTextFieldDateEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.text.DefaultStyledDocument;
 import net.miginfocom.swing.MigLayout;
@@ -30,7 +31,7 @@ import net.miginfocom.swing.MigLayout;
  *
  * @author Tanesh Manjrekar
  */
-public class ProviderTerminal extends JFrame implements ActionListener
+public class ProviderTerminal extends JFrame implements ActionListener, KeyListener
 {
     private CardLayout mainPanelLayout;
     private JPanel mainPanel,
@@ -39,10 +40,8 @@ public class ProviderTerminal extends JFrame implements ActionListener
     private JButton memberOperationButton,
             generateProviderDirectoryButton,
             backToOperationChoiceButton,
-            selectDateButton,
             submitDetailsButton;
     private JTextField memberIDTextField,
-            dateOfServiceTextField,
             serviceCodeTextField,
             serviceNameTextField;
     private JTextArea commentsTextArea;
@@ -52,6 +51,7 @@ public class ProviderTerminal extends JFrame implements ActionListener
             serviceCodeLabel,
             serviceNameLabel,
             commentsLabel;
+    JDateChooser dateChooser;
     
     private ProviderTerminal()
     {
@@ -118,13 +118,14 @@ public class ProviderTerminal extends JFrame implements ActionListener
         memberIDTextField = new JTextField();
         memberIDTextField.setFont(Initializer.getDefaultFont());
         
-        dateOfServiceTextField = new JTextField();
-        dateOfServiceTextField.setFont(Initializer.getDefaultFont());
-        dateOfServiceTextField.setEditable(false);
-        dateOfServiceTextField.setText(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
+        dateChooser = new JDateChooser(new Date());
+        dateChooser.setFont(Initializer.getDefaultFont());
+        dateChooser.setDateFormatString("dd MMM yyyy");
+        ((JTextFieldDateEditor) dateChooser.getComponent(1)).setHorizontalAlignment(JTextField.CENTER);
         
         serviceCodeTextField = new JTextField();
         serviceCodeTextField.setFont(Initializer.getDefaultFont());
+        serviceCodeTextField.addKeyListener(this);
         serviceNameTextField = new JTextField();
         serviceCodeTextField.setFont(Initializer.getDefaultFont());
         serviceNameTextField.setEditable(false);
@@ -141,9 +142,6 @@ public class ProviderTerminal extends JFrame implements ActionListener
         backToOperationChoiceButton = new JButton("Back");
         backToOperationChoiceButton.setFont(Initializer.getDefaultFont());
         backToOperationChoiceButton.addActionListener(this);
-        selectDateButton = new JButton("Select date");
-        selectDateButton.setFont(Initializer.getDefaultFont());
-        selectDateButton.addActionListener(this);
         submitDetailsButton = new JButton("Submit");
         submitDetailsButton.setFont(Initializer.getDefaultFont());
         submitDetailsButton.addActionListener(this);
@@ -171,14 +169,13 @@ public class ProviderTerminal extends JFrame implements ActionListener
         memberOperationPanel.add(memberIDLabel, "grow");
         memberOperationPanel.add(memberIDTextField, "grow, span 2, wrap");
         memberOperationPanel.add(dateOfServiceLabel, "grow");
-        memberOperationPanel.add(dateOfServiceTextField, "grow, span 2, split 2");
-        memberOperationPanel.add(selectDateButton, "wrap");
+        memberOperationPanel.add(dateChooser, "grow, wrap");
         memberOperationPanel.add(serviceCodeLabel, "grow");
         memberOperationPanel.add(serviceCodeTextField, "grow,wrap");
         memberOperationPanel.add(serviceNameLabel, "grow");
         memberOperationPanel.add(serviceNameTextField, "grow, wrap");
         memberOperationPanel.add(commentsLabel, "span 1 3, aligny center, grow");
-        memberOperationPanel.add(commentsScrollPane, "span 1 3, grow, h 60:70:80, wrap");
+        memberOperationPanel.add(commentsScrollPane, "span 1 3, grow, w pref+150, h 60:70:80, wrap");
         memberOperationPanel.add(backToOperationChoiceButton, "cell 0 7");
         memberOperationPanel.add(submitDetailsButton, "cell 1 7, align right");
     }
@@ -203,14 +200,39 @@ public class ProviderTerminal extends JFrame implements ActionListener
         {
             mainPanelLayout.show(mainPanel, "Choice");
         }
-        else if(ae.getSource().equals(selectDateButton))
-        {
-            
-        }
         else if(ae.getSource().equals(submitDetailsButton))
         {
             
         }
+    }
+    
+    @Override
+    public void keyReleased(KeyEvent ke)
+    {
+        if(ke.getSource().equals(serviceCodeTextField))
+        {
+            if(serviceCodeTextField.getText().length()==6)
+            {
+                serviceNameTextField.setText(getServiceName(serviceCodeTextField.getText()));
+            }
+        }
+    }
+    
+    @Override
+    public void keyTyped(KeyEvent ke) 
+    {
+        
+    }
+
+    @Override
+    public void keyPressed(KeyEvent ke) 
+    {
+        
+    }
+    
+    private String getServiceName(String serviceCode)
+    {
+        
     }
     
     public static void main(String args[])

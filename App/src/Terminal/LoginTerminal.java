@@ -158,7 +158,6 @@ public class LoginTerminal extends JFrame implements ActionListener
         
         //Creating helper object to access database
         DatabaseHelper dbHelper = new DatabaseHelper();
-        dbHelper.open();
         if(dbHelper.checkUser(sql))
         {
             setVisible(false);
@@ -178,6 +177,5 @@ public class LoginTerminal extends JFrame implements ActionListener
         {
             JOptionPane.showMessageDialog(this, "Invalid credentials!", "Error", JOptionPane.ERROR_MESSAGE);
         }
-        dbHelper.close();
     }
 }
