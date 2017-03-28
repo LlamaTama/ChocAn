@@ -17,9 +17,13 @@
 
 package Terminal;
 
+import External.DocumentSizeFilter;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import javax.swing.text.DefaultStyledDocument;
 import net.miginfocom.swing.MigLayout;
 
 /**
@@ -39,8 +43,10 @@ public class ProviderTerminal extends JFrame implements ActionListener
             submitDetailsButton;
     private JTextField memberIDTextField,
             dateOfServiceTextField,
-            serviceCodeTextField;
+            serviceCodeTextField,
+            serviceNameTextField;
     private JTextArea commentsTextArea;
+    private JScrollPane commentsScrollPane;
     private JLabel memberIDLabel,
             dateOfServiceLabel,
             serviceCodeLabel,
@@ -61,7 +67,8 @@ public class ProviderTerminal extends JFrame implements ActionListener
         addComponents();
         
         //Frame constraints
-        setSize(400, 180);
+        pack();
+        setSize(getPreferredSize());
         setTitle("Provider");
         setResizable(true);
         setLocationRelativeTo(null); //centers frame on screen
@@ -79,9 +86,9 @@ public class ProviderTerminal extends JFrame implements ActionListener
         wrap 1 - goes to next line after every 1 component
         gapy 15 - 15 unit vertical gap between components
         */
-        operationChoicePanel = new JPanel(new MigLayout("fillx, align center center, wrap 1, gapy 15"));
+        operationChoicePanel = new JPanel(new MigLayout("fill, align center center, wrap 1, gapy 10%"));
         initializeOperationChoiceComponents();
-        memberOperationPanel = new JPanel(new MigLayout("fillx"));
+        memberOperationPanel = new JPanel(new MigLayout("fill"));
         initializeMemberOperationComponents();
     }
     
@@ -103,19 +110,33 @@ public class ProviderTerminal extends JFrame implements ActionListener
         dateOfServiceLabel.setFont(Initializer.getDefaultFont());
         serviceCodeLabel = new JLabel("Service Code");
         serviceCodeLabel.setFont(Initializer.getDefaultFont());
-        serviceNameLabel = new JLabel();
+        serviceNameLabel = new JLabel("Service Name");
         serviceNameLabel.setFont(Initializer.getDefaultFont());
         commentsLabel = new JLabel("Comments");
         commentsLabel.setFont(Initializer.getDefaultFont());
         
         memberIDTextField = new JTextField();
         memberIDTextField.setFont(Initializer.getDefaultFont());
+        
         dateOfServiceTextField = new JTextField();
         dateOfServiceTextField.setFont(Initializer.getDefaultFont());
+        dateOfServiceTextField.setEditable(false);
+        dateOfServiceTextField.setText(new SimpleDateFormat("dd MMM yyyy").format(new Date()));
+        
         serviceCodeTextField = new JTextField();
         serviceCodeTextField.setFont(Initializer.getDefaultFont());
+        serviceNameTextField = new JTextField();
+        serviceCodeTextField.setFont(Initializer.getDefaultFont());
+        serviceNameTextField.setEditable(false);
+        
         commentsTextArea = new JTextArea();
         commentsTextArea.setFont(Initializer.getDefaultFont());
+        commentsTextArea.setLineWrap(true);
+        commentsTextArea.setWrapStyleWord(true);
+        DefaultStyledDocument sizeDocument = new DefaultStyledDocument();
+        sizeDocument.setDocumentFilter(new DocumentSizeFilter(100));
+        commentsTextArea.setDocument(sizeDocument);
+        commentsScrollPane = new JScrollPane(commentsTextArea, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         
         backToOperationChoiceButton = new JButton("Back");
         backToOperationChoiceButton.setFont(Initializer.getDefaultFont());
@@ -141,24 +162,25 @@ public class ProviderTerminal extends JFrame implements ActionListener
     
     private void addOperationChoiceComponents()
     {
-        operationChoicePanel.add(memberOperationButton, "grow");
-        operationChoicePanel.add(generateProviderDirectoryButton, "grow");
+        operationChoicePanel.add(memberOperationButton, "h 15%:20%:30%, grow");
+        operationChoicePanel.add(generateProviderDirectoryButton, "h 15%:20%:30%, grow");
     }
     
     private void addMemberOperationComponents()
     {
-        memberOperationPanel.add(backToOperationChoiceButton, "align left, span 3, split 3, wrap");
         memberOperationPanel.add(memberIDLabel, "grow");
-        memberOperationPanel.add(memberIDTextField, "grow, wrap");
+        memberOperationPanel.add(memberIDTextField, "grow, span 2, wrap");
         memberOperationPanel.add(dateOfServiceLabel, "grow");
-        memberOperationPanel.add(dateOfServiceTextField, "grow");
+        memberOperationPanel.add(dateOfServiceTextField, "grow, span 2, split 2");
         memberOperationPanel.add(selectDateButton, "wrap");
         memberOperationPanel.add(serviceCodeLabel, "grow");
-        memberOperationPanel.add(serviceCodeTextField, "grow");
-        memberOperationPanel.add(serviceNameLabel, "grow, wrap");
-        memberOperationPanel.add(commentsLabel, "grow");
-        memberOperationPanel.add(commentsTextArea, "grow, wrap");
-        memberOperationPanel.add(submitDetailsButton, "span 3, split 3, align center");
+        memberOperationPanel.add(serviceCodeTextField, "grow,wrap");
+        memberOperationPanel.add(serviceNameLabel, "grow");
+        memberOperationPanel.add(serviceNameTextField, "grow, wrap");
+        memberOperationPanel.add(commentsLabel, "span 1 3, aligny center, grow");
+        memberOperationPanel.add(commentsScrollPane, "span 1 3, grow, h 60:70:80, wrap");
+        memberOperationPanel.add(backToOperationChoiceButton, "cell 0 7");
+        memberOperationPanel.add(submitDetailsButton, "cell 1 7, align right");
     }
     
     public static void createProviderTerminal()
@@ -172,16 +194,14 @@ public class ProviderTerminal extends JFrame implements ActionListener
         if(ae.getSource().equals(memberOperationButton))
         {
             mainPanelLayout.show(mainPanel,"Billing");
-            setSize(800, 400);
         }
         else if(ae.getSource().equals(generateProviderDirectoryButton))
         {
-            mainPanelLayout.show(mainPanel, "Choice");
-            setSize(400, 180);
+            
         }
         else if(ae.getSource().equals(backToOperationChoiceButton))
         {
-            
+            mainPanelLayout.show(mainPanel, "Choice");
         }
         else if(ae.getSource().equals(selectDateButton))
         {
