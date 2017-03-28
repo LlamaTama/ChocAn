@@ -81,6 +81,7 @@ public class DatabaseHelper
     
      public boolean checkUser(String sql) 
      {
+         open();
         try 
         {
             ResultSet rs = stmt.executeQuery(sql);
@@ -100,6 +101,7 @@ public class DatabaseHelper
             Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
         }
         
+        close();
         return false;
      }
     
