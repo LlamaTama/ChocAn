@@ -98,15 +98,24 @@ public class ProviderTerminal extends JFrame implements ActionListener
     private void initializeMemberOperationComponents()
     {
         memberIDLabel = new JLabel("Member ID");
+        memberIDLabel.setFont(Initializer.getDefaultFont());
         dateOfServiceLabel = new JLabel("Date of Service");
+        dateOfServiceLabel.setFont(Initializer.getDefaultFont());
         serviceCodeLabel = new JLabel("Service Code");
+        serviceCodeLabel.setFont(Initializer.getDefaultFont());
         serviceNameLabel = new JLabel();
+        serviceNameLabel.setFont(Initializer.getDefaultFont());
         commentsLabel = new JLabel("Comments");
+        commentsLabel.setFont(Initializer.getDefaultFont());
         
         memberIDTextField = new JTextField();
+        memberIDTextField.setFont(Initializer.getDefaultFont());
         dateOfServiceTextField = new JTextField();
+        dateOfServiceTextField.setFont(Initializer.getDefaultFont());
         serviceCodeTextField = new JTextField();
+        serviceCodeTextField.setFont(Initializer.getDefaultFont());
         commentsTextArea = new JTextArea();
+        commentsTextArea.setFont(Initializer.getDefaultFont());
         
         backToOperationChoiceButton = new JButton("Back");
         backToOperationChoiceButton.setFont(Initializer.getDefaultFont());
@@ -138,7 +147,18 @@ public class ProviderTerminal extends JFrame implements ActionListener
     
     private void addMemberOperationComponents()
     {
-        
+        memberOperationPanel.add(backToOperationChoiceButton, "align left, span 3, split 3, wrap");
+        memberOperationPanel.add(memberIDLabel, "grow");
+        memberOperationPanel.add(memberIDTextField, "grow, wrap");
+        memberOperationPanel.add(dateOfServiceLabel, "grow");
+        memberOperationPanel.add(dateOfServiceTextField, "grow");
+        memberOperationPanel.add(selectDateButton, "wrap");
+        memberOperationPanel.add(serviceCodeLabel, "grow");
+        memberOperationPanel.add(serviceCodeTextField, "grow");
+        memberOperationPanel.add(serviceNameLabel, "grow, wrap");
+        memberOperationPanel.add(commentsLabel, "grow");
+        memberOperationPanel.add(commentsTextArea, "grow, wrap");
+        memberOperationPanel.add(submitDetailsButton, "span 3, split 3, align center");
     }
     
     public static void createProviderTerminal()
@@ -152,8 +172,7 @@ public class ProviderTerminal extends JFrame implements ActionListener
         if(ae.getSource().equals(memberOperationButton))
         {
             mainPanelLayout.show(mainPanel,"Billing");
-            pack();
-            setSize(getPreferredSize());
+            setSize(800, 400);
         }
         else if(ae.getSource().equals(generateProviderDirectoryButton))
         {
@@ -172,5 +191,10 @@ public class ProviderTerminal extends JFrame implements ActionListener
         {
             
         }
+    }
+    
+    public static void main(String args[])
+    {
+        ProviderTerminal.createProviderTerminal();
     }
 }

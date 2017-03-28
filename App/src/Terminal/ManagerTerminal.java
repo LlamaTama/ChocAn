@@ -36,7 +36,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
         fillx - allows component to fill the space provided horizontally
         align center center - aligns components horizontally and vertically
         wrap 1 - goes to next line after every 1 component
-        gapy 10 - 10 unit vertical gap between components
+        gapy 15 - 15 unit vertical gap between components
         */
         setLayout(new MigLayout("fillx, align center center, wrap 1, gapy 15"));
         
