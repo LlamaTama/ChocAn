@@ -21,6 +21,8 @@ import  org.apache.poi.hssf.usermodel.HSSFRow;
 import  org.apache.poi.hssf.usermodel.HSSFCell; 
 import  java.io.*;  
 import  java.sql.*;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -30,14 +32,17 @@ import java.util.logging.Logger;
  */
 public class MemberReport 
 {
+    private int id;
     
     //  name of excel file
     String filename = "Reports\\MemberReport.xls";
     
-    public MemberReport() throws FileNotFoundException, IOException
+    public MemberReport(int id) throws FileNotFoundException, IOException
     {
+        this.id = id;
+        
         HSSFWorkbook hwb = new HSSFWorkbook();
-        HSSFSheet sheet = hwb.createSheet("new sheet");
+        HSSFSheet sheet = hwb.createSheet("Weekly Report");
         
         //  creating cells
         HSSFRow rowhead = sheet.createRow((short)0);
@@ -48,18 +53,12 @@ public class MemberReport
         rowhead.createCell((short) 4).setCellValue("City");
         rowhead.createCell((short) 5).setCellValue("Zip");
         
-        //  databse connection
+        //  database connection
         DatabaseHelper dbHelper = new DatabaseHelper();
-        dbHelper.open();
         
-        try 
-        {
-            Statement st = dbHelper.stmt;
-            ResultSet rs = st.executeQuery("select * from Member");
-        
-        //  iteration for inserting values in rows
-        int i=1;
-        while(rs.next())
+        ArrayList<String[]> memberDetails = dbHelper.getUserDetails(id, "member");
+        Iterator<String []> memberIterator = memberDetails.iterator();
+        while(memberIterator.hasNext())
         {
             HSSFRow row=   sheet.createRow((short)i);
             row.createCell((short) 0).setCellValue(Integer.toString(rs.getInt("ID")));
@@ -78,12 +77,5 @@ public class MemberReport
         System.out.println("Your excel file has been generated!");
         
         } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(MemberReport.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
     }
-    
 }
