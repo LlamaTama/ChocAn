@@ -19,11 +19,9 @@ package Terminal;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -35,16 +33,20 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 public class ProviderReport 
 {
     private final int id;
+    private final Date lastDate;
+    private final Date currentDate;
     
     //  name of excel file
     String filename = "Reports\\ProviderReport.xls";
     
-    public ProviderReport(int id) throws FileNotFoundException, IOException
+    public ProviderReport(int id, Date lastDate, Date currentDate) throws FileNotFoundException, IOException
     {
         this.id = id;
+        this.lastDate = lastDate;
+        this.currentDate = currentDate;
         
         HSSFWorkbook hwb = new HSSFWorkbook();
-        HSSFSheet sheet = hwb.createSheet("new sheet");
+        HSSFSheet sheet = hwb.createSheet("Weekly Report");
         
         //  creating cells
         HSSFRow rowhead = sheet.createRow((short)0);
@@ -55,42 +57,30 @@ public class ProviderReport
         rowhead.createCell((short) 4).setCellValue("City");
         rowhead.createCell((short) 5).setCellValue("Zip");
         
-        //  databse connection
+        //  database connection
         DatabaseHelper dbHelper = new DatabaseHelper();
-        dbHelper.open();
         
-        try 
+        ArrayList<String[]> providerDetails = dbHelper.getUserDetails(id, "provider");
+        Iterator<String []> providerIterator = providerDetails.iterator();
+        int i = 0;
+        while(providerIterator.hasNext())
         {
-            Statement st = dbHelper.stmt;
-            ResultSet rs = st.executeQuery("select * from Provider");
-        
-        //  iteration for inserting values in rows
-        int i=1;
-        while(rs.next())
-        {
-            HSSFRow row=   sheet.createRow((short)i);
-            row.createCell((short) 0).setCellValue(Integer.toString(rs.getInt("ID")));
-            row.createCell((short) 1).setCellValue(rs.getString("Name"));
-            row.createCell((short) 2).setCellValue(rs.getString("Address"));
-            row.createCell((short) 3).setCellValue(rs.getString("State"));
-            row.createCell((short) 4).setCellValue(rs.getString("City"));
-            row.createCell((short) 5).setCellValue(Integer.toString(rs.getInt("Zip")));
+            String[] details = providerIterator.next();
+            HSSFRow row =   sheet.createRow((short)i);
+            row.createCell((short) 0).setCellValue(details[0]);
+            row.createCell((short) 1).setCellValue(details[1]);
             i++;
         }
+        
+        sheet.createRow(i);
+        sheet.createRow(i++);
+        
+        ArrayList<ArrayList> appointmentDetails = dbHelper.getAppointmentDetails(id, lastDate, currentDate);
         
         //  writing data to xls file
         FileOutputStream fileOut = new FileOutputStream(filename);
         hwb.write(fileOut);
         fileOut.close();
-        System.out.println("Your excel file has been generated!");
-        
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(MemberReport.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-        
-    }
-    
+        System.out.println("Your excel file has been generated!"); 
+    } 
 }
