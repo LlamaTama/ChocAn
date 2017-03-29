@@ -173,13 +173,14 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("insert into app.appointment values(?, ?, ?, ?, ?, ?)");
+            PreparedStatement ps = conn.prepareStatement("insert into app.appointment values(?, ?, ?, ?, ?, ?, ?)");
             ps.setInt(1, memberID);
             ps.setInt(2, providerID);
             ps.setInt(3, serviceCode);
             ps.setDate(4, new java.sql.Date(serviceDate.getTime()));
             ps.setDate(5, new java.sql.Date(currentDate.getTime()));
             ps.setString(6, comments);
+            ps.setTime(7, new java.sql.Time(currentDate.getTime()));
             if(ps.executeUpdate()>0)
             {
                 result = true;
