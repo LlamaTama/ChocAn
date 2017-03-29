@@ -261,21 +261,26 @@ public class DatabaseHelper
         return userDetails;
     }
     
-    public ArrayList<String[]> getAppointmentDetails(int id)
+    public ArrayList<ArrayList> getAppointmentDetails(int id, Date lastDate, Date currentDate)
     {
         open();
         
-        ArrayList<String[]> appointmentDetails = new ArrayList<String[]>();
+        ArrayList<ArrayList> appointments = new ArrayList<>();
+        java.sql.Date lDate = new java.sql.Date(lastDate.getTime());
+        java.sql.Date cDate = new java.sql.Date(currentDate.getTime());
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where id=?");
+            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where id=? and \"Date of Service\">=? and \"Date of Service\"<?");
             ps.setInt(1, id);
+            ps.setDate(2, lDate);
+            ps.setDate(3, cDate);
             
             ResultSet rs = ps.executeQuery();
             
             while(rs.next())
             {
+                ArrayList<String[]> appointmentDetails = new ArrayList<>();
                 appointmentDetails.add(new String[]{"Member ID", "" + rs.getInt(1)});
                 appointmentDetails.add(new String[]{"Provider ID", "" + rs.getInt(2)});
                 appointmentDetails.add(new String[]{"Service Code", "" + rs.getInt(3)});
@@ -283,6 +288,8 @@ public class DatabaseHelper
                 appointmentDetails.add(new String[]{"Current Date", rs.getDate(5).toString()});
                 appointmentDetails.add(new String[]{"Current Time", rs.getTime(7).toString()});
                 appointmentDetails.add(new String[]{"Comments", rs.getString(6)});
+                
+                appointments.add(appointmentDetails);
             }
             
             rs.close();
@@ -294,6 +301,6 @@ public class DatabaseHelper
         
         close();
         
-        return appointmentDetails;
+        return appointments;
     }
 }
