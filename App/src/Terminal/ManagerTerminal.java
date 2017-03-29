@@ -27,6 +27,8 @@ import java.io.*;
  * @author vishc
  */
 import java.awt.Desktop;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 public class ManagerTerminal extends JFrame implements ActionListener
 {
@@ -102,12 +104,16 @@ public class ManagerTerminal extends JFrame implements ActionListener
             {
                 try 
                 {
-                    MemberReport mr = new MemberReport(id, Initializer.getLastRunDate(), new Date());
+                    MemberReport mr = new MemberReport(id, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                     //automatic file opening
                     File r = new File("Reports\\MemberReport.xls");
                     Desktop.getDesktop().open(r);
                 } 
                 catch (IOException ex) 
+                {
+                    Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                } 
+                catch (ParseException ex) 
                 {
                     Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -125,12 +131,16 @@ public class ManagerTerminal extends JFrame implements ActionListener
             {
                 try 
                 {
-                    ProviderReport pr = new ProviderReport(id, Initializer.getLastRunDate(), new Date());
+                    ProviderReport pr = new ProviderReport(id, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                     //automatic file opening
                     File r = new File("Reports\\ProviderReport.xls");
                     Desktop.getDesktop().open(r);
                 } 
                 catch (IOException ex) 
+                {
+                    Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                catch (ParseException ex) 
                 {
                     Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
                 }
