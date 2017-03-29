@@ -15,16 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Terminal;
-import  org.apache.poi.hssf.usermodel.HSSFSheet;  
-import  org.apache.poi.hssf.usermodel.HSSFWorkbook; 
-import  org.apache.poi.hssf.usermodel.HSSFRow;
-import  org.apache.poi.hssf.usermodel.HSSFCell; 
-import  java.io.*;  
-import  java.sql.*;
+import org.apache.poi.hssf.usermodel.HSSFSheet;  
+import org.apache.poi.hssf.usermodel.HSSFWorkbook; 
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import java.io.*;  
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 
 /**
  *
@@ -32,7 +29,7 @@ import java.util.logging.Logger;
  */
 public class MemberReport 
 {
-    private int id;
+    private final int id;
     
     //  name of excel file
     String filename = "Reports\\MemberReport.xls";
@@ -58,15 +55,13 @@ public class MemberReport
         
         ArrayList<String[]> memberDetails = dbHelper.getUserDetails(id, "member");
         Iterator<String []> memberIterator = memberDetails.iterator();
+        int i = 0;
         while(memberIterator.hasNext())
         {
-            HSSFRow row=   sheet.createRow((short)i);
-            row.createCell((short) 0).setCellValue(Integer.toString(rs.getInt("ID")));
-            row.createCell((short) 1).setCellValue(rs.getString("Name"));
-            row.createCell((short) 2).setCellValue(rs.getString("Address"));
-            row.createCell((short) 3).setCellValue(rs.getString("State"));
-            row.createCell((short) 4).setCellValue(rs.getString("City"));
-            row.createCell((short) 5).setCellValue(Integer.toString(rs.getInt("Zip")));
+            String[] details = memberIterator.next();
+            HSSFRow row =   sheet.createRow((short)i);
+            row.createCell((short) 0).setCellValue(details[0]);
+            row.createCell((short) 1).setCellValue(details[1]);
             i++;
         }
         
@@ -76,6 +71,5 @@ public class MemberReport
         fileOut.close();
         System.out.println("Your excel file has been generated!");
         
-        } 
-    }
+    } 
 }
