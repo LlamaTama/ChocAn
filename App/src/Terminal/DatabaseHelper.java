@@ -37,8 +37,8 @@ public class DatabaseHelper
     private String USER = "";
     private String PASS = "";
     
-    private Connection conn;
-    private Statement stmt;
+    public Connection conn;
+    public Statement stmt;
      
     public DatabaseHelper()
     {

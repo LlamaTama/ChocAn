@@ -17,6 +17,9 @@
 package Terminal;
 import javax.swing.*;
 import java.awt.event.*;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.miginfocom.swing.MigLayout;
 /**
  *
@@ -86,6 +89,11 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         if(ae.getSource().equals(viewMemberReportButton))
         {
+            try {
+                MemberReport mr = new MemberReport();
+            } catch (IOException ex) {
+                Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+            }
             
         }
         else if(ae.getSource().equals(viewProviderReportButton))

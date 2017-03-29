@@ -232,6 +232,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
     
     private String getServiceName(String serviceCode)
     {
+        return null;
         
     }
     
