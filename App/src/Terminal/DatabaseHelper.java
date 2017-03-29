@@ -112,6 +112,38 @@ public class DatabaseHelper
        return result;
     }
     
+    public boolean checkUserID(int id, String type)
+    {
+        open();
+       
+       boolean result = false;
+       
+       try 
+       {
+           PreparedStatement ps = conn.prepareStatement("select * from app." + type + " where id=?");
+           ps.setInt(1, id);
+           
+           ResultSet rs = ps.executeQuery();
+
+           //  Getting data from result set
+           if(rs.next())
+           {
+               //System.out.println(rs.getInt(1));
+               //System.out.println(rs.getString(2));
+               result = true;
+           }
+
+           rs.close();
+       } 
+       catch (SQLException ex) 
+       {
+           Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+       }
+
+       close();
+       return result;
+    }
+    
     public String getServiceName(String serviceCode)
     {
         open();
@@ -234,7 +266,7 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select * from app." + type + "where id=?");
+            PreparedStatement ps = conn.prepareStatement("select * from app." + type + " where id=?");
             ps.setInt(1, id);
             
             ResultSet rs = ps.executeQuery();
