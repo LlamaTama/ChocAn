@@ -20,6 +20,7 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import java.io.*;  
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 
@@ -30,13 +31,17 @@ import java.util.Iterator;
 public class MemberReport 
 {
     private final int id;
+    private final Date lastDate;
+    private final Date currentDate;
     
     //  name of excel file
     String filename = "Reports\\MemberReport.xls";
     
-    public MemberReport(int id) throws FileNotFoundException, IOException
+    public MemberReport(int id, Date lastDate, Date currentDate) throws FileNotFoundException, IOException
     {
         this.id = id;
+        this.lastDate = lastDate;
+        this.currentDate = currentDate;
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
