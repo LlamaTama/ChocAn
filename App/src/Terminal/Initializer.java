@@ -49,7 +49,7 @@ public class Initializer
         return defaultFont;
     }
     
-    public Date getLastRunDate()
+    public static Date getLastRunDate()
     {
         Date lastRun = new Date();
         
@@ -61,11 +61,11 @@ public class Initializer
             
             p.load(fis);
             
-            lastRun = DateFormat.parse(p.getProperty("lastDate"));
+            lastRun = new Date(p.getProperty("lastDate"));
         }
-        catch(IOException | ParseException e)
+        catch(IOException ioe)
         {
-            System.out.println(e);
+            System.out.println(ioe);
         }
         
         return lastRun;
