@@ -21,10 +21,12 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.miginfocom.swing.MigLayout;
+import java.io.*;
 /**
  *
  * @author vishc
  */
+import java.awt.Desktop;
 public class ManagerTerminal extends JFrame implements ActionListener
 {
     private JButton viewMemberReportButton,
@@ -92,17 +94,23 @@ public class ManagerTerminal extends JFrame implements ActionListener
             try 
             {
                 MemberReport mr = new MemberReport();
+                //automatic file opening
+                File r = new File("Reports\\MemberReport.xls");
+                Desktop.getDesktop().open(r);
             } catch (IOException ex) 
             {
                 Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+           
         }
         else if(ae.getSource().equals(viewProviderReportButton))
         {
             try 
             {
                 ProviderReport pr = new ProviderReport();
+                //automatic file opening
+                File r = new File("Reports\\ProviderReport.xls");
+                Desktop.getDesktop().open(r);
             } catch (IOException ex) 
             {
                 Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
