@@ -33,6 +33,10 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ProviderTerminal extends JFrame implements ActionListener, KeyListener
 {
+    private final String providerID;
+    private final DatabaseHelper dbHelper;
+    private boolean serviceCodeValid;
+    
     private CardLayout mainPanelLayout;
     private JPanel mainPanel,
             operationChoicePanel, 
@@ -53,10 +57,13 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
             commentsLabel;
     JDateChooser dateChooser;
     
-    private ProviderTerminal()
+    private ProviderTerminal(String providerID)
     {
         //Calling super class constructor and setting layout constraints
         super();
+        this.providerID = providerID;
+        dbHelper = new DatabaseHelper();
+        serviceCodeValid = false;
         /*
         fillx - allows component to fill the space provided horizontally
         align center center - aligns components horizontally and vertically
@@ -120,14 +127,14 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         
         dateChooser = new JDateChooser(new Date());
         dateChooser.setFont(Initializer.getDefaultFont());
-        dateChooser.setDateFormatString("dd MMM yyyy");
+        dateChooser.setDateFormatString("yyyy-MM-dd");
         ((JTextFieldDateEditor) dateChooser.getComponent(1)).setHorizontalAlignment(JTextField.CENTER);
         
         serviceCodeTextField = new JTextField();
         serviceCodeTextField.setFont(Initializer.getDefaultFont());
         serviceCodeTextField.addKeyListener(this);
         serviceNameTextField = new JTextField();
-        serviceCodeTextField.setFont(Initializer.getDefaultFont());
+        serviceNameTextField.setFont(Initializer.getDefaultFont());
         serviceNameTextField.setEditable(false);
         
         commentsTextArea = new JTextArea();
@@ -180,9 +187,9 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         memberOperationPanel.add(submitDetailsButton, "cell 1 7, align right");
     }
     
-    public static void createProviderTerminal()
+    public static void createProviderTerminal(String providerID)
     {
-        ProviderTerminal pt = new ProviderTerminal();
+        ProviderTerminal pt = new ProviderTerminal(providerID);
     }
     
     @Override
@@ -202,7 +209,19 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         }
         else if(ae.getSource().equals(submitDetailsButton))
         {
-            
+            if(serviceCodeValid)
+            {                
+                if(dbHelper.insertAppointment(Integer.parseInt(memberIDTextField.getText()), Integer.parseInt(providerID), Integer.parseInt(serviceCodeTextField.getText()), dateChooser.getDate(), new Date(), commentsTextArea.getText()))
+                {
+                    JOptionPane.showMessageDialog(this, "Fees due are " + dbHelper.getServicePrice(Integer.parseInt(serviceCodeTextField.getText())), "Success", JOptionPane.INFORMATION_MESSAGE);
+                    
+                    memberIDTextField.setText("");
+                    serviceCodeTextField.setText("");
+                    serviceNameTextField.setText("");
+                    commentsTextArea.setText("");
+                    
+                }
+            }
         }
     }
     
@@ -213,7 +232,15 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         {
             if(serviceCodeTextField.getText().length()==6)
             {
-                serviceNameTextField.setText(getServiceName(serviceCodeTextField.getText()));
+                serviceNameTextField.setText(dbHelper.getServiceName(serviceCodeTextField.getText()));
+                if(dbHelper.checkServiceCode(serviceCodeTextField.getText()))
+                {
+                    serviceCodeValid = true;
+                }
+            }
+            else
+            {
+                serviceNameTextField.setText("");
             }
         }
     }
@@ -230,14 +257,8 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         
     }
     
-    private String getServiceName(String serviceCode)
-    {
-        return null;
-        
-    }
-    
     public static void main(String args[])
     {
-        ProviderTerminal.createProviderTerminal();
+        ProviderTerminal.createProviderTerminal("111111111");
     }
 }

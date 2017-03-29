@@ -154,17 +154,16 @@ public class LoginTerminal extends JFrame implements ActionListener
     {
         String id = idTextField.getText();
         String pw = new String(passwordField.getPassword());
-        String sql = "select * from " + tableName + " where id=" + id + " and pass='" + pw + "'";
         
         //Creating helper object to access database
         DatabaseHelper dbHelper = new DatabaseHelper();
-        if(dbHelper.checkUser(sql))
+        if(dbHelper.checkUser(tableName, id, pw))
         {
             setVisible(false);
             
             if(providerTypeRadioButton.isSelected())
             {
-                ProviderTerminal.createProviderTerminal();
+                ProviderTerminal.createProviderTerminal(id);
             }
             else
             {

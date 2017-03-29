@@ -17,9 +17,12 @@
 package Terminal;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -79,30 +82,144 @@ public class DatabaseHelper
         }
     }
     
-     public boolean checkUser(String sql) 
-     {
-         open();
-        try 
+    public boolean checkUser(String tableName, String id, String pw) 
+    {
+       open();
+       
+       boolean result = false;
+       
+       try 
+       {
+           ResultSet rs = stmt.executeQuery("select * from " + tableName + " where id=" + id + " and pass='" + pw + "'");
+
+           //  Getting data from result set
+           if(rs.next())
+           {
+               //System.out.println(rs.getInt(1));
+               //System.out.println(rs.getString(2));
+               result = true;
+           }
+
+           rs.close();
+       } 
+       catch (SQLException ex) 
+       {
+           Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+       }
+
+       close();
+       return result;
+    }
+    
+    public String getServiceName(String serviceCode)
+    {
+        open();
+        
+        String result = "Invalid service code!";
+        
+        try
         {
-            ResultSet rs = stmt.executeQuery(sql);
-          
-            //  Getting data from result set
-            while(rs.next())
+            ResultSet rs = stmt.executeQuery("select \"Service Name\" from app.provider_directory where \"Service Code\"=" + serviceCode);
+            
+            if(rs.next())
             {
-                //System.out.println(rs.getInt(1));
-                //System.out.println(rs.getString(2));
-                return true;
+                result = rs.getString(1);
             }
-          
+            
             rs.close();
-        } 
-        catch (SQLException ex) 
+        }
+        catch(SQLException se)
         {
-            Logger.getLogger(DatabaseHelper.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println(se);
         }
         
         close();
-        return false;
-     }
+        
+        return result;
+    }
     
+    public boolean checkServiceCode(String serviceCode)
+    {
+        open();
+        
+        boolean result = false;
+        
+        try
+        {
+            ResultSet rs = stmt.executeQuery("select * from app.provider_directory where \"Service Code\"=" + serviceCode);
+            
+            if(rs.next())
+            {
+                result = true;
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return result;
+    }
+    
+    public boolean insertAppointment(int memberID, int providerID, int serviceCode, Date serviceDate, Date currentDate, String comments)
+    {
+        open();
+        
+        boolean result = false;
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("insert into app.appointment values(?, ?, ?, ?, ?, ?)");
+            ps.setInt(1, memberID);
+            ps.setInt(2, providerID);
+            ps.setInt(3, serviceCode);
+            ps.setDate(4, new java.sql.Date(serviceDate.getTime()));
+            ps.setDate(5, new java.sql.Date(currentDate.getTime()));
+            ps.setString(6, comments);
+            if(ps.executeUpdate()>0)
+            {
+                result = true;
+            }
+
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return result;
+    }
+    
+    public int getServicePrice(int serviceCode)
+    {
+        open();
+        
+        int servicePrice = 0;
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select FEES from app.provider_directory where \"Service Code\"=" + serviceCode);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next())
+            {
+                servicePrice = rs.getInt(1);
+            }
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return servicePrice;
+    }
 }
