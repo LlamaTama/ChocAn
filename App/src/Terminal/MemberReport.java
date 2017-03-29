@@ -35,13 +35,14 @@ public class MemberReport
     private final Date currentDate;
     
     //  name of excel file
-    String filename = "Reports\\MemberReport.xls";
+    private String filename;
     
     public MemberReport(int memID, Date lDate, Date cDate) throws FileNotFoundException, IOException
     {
         id = memID;
         lastDate = lDate;
         currentDate = cDate;
+        filename = "Reports\\MemberReport" + id + lDate.toString() + " - " + cDate.toString() + ".xls";
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
@@ -75,6 +76,10 @@ public class MemberReport
         hwb.write(fileOut);
         fileOut.close();
         System.out.println("Your excel file has been generated!");
-        
     } 
+    
+    public String getFileName()
+    {
+        return filename;
+    }
 }
