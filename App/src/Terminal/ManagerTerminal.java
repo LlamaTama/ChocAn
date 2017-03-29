@@ -29,6 +29,8 @@ import java.io.*;
 import java.awt.Desktop;
 public class ManagerTerminal extends JFrame implements ActionListener
 {
+    private DatabaseHelper dbHelper;
+    
     private JButton viewMemberReportButton,
             viewProviderReportButton,
             viewSummaryReportButton;
@@ -37,6 +39,9 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         //Calling super class constructor and setting layout constraints
         super();
+        
+        dbHelper = new DatabaseHelper();
+        
         /*
         fillx - allows component to fill the space provided horizontally
         align center center - aligns components horizontally and vertically
@@ -91,29 +96,43 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         if(ae.getSource().equals(viewMemberReportButton))
         {
-            try 
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Member ID"));
+            if(dbHelper.checkUserID(id, "member"))
             {
-                MemberReport mr = new MemberReport();
-                //automatic file opening
-                File r = new File("Reports\\MemberReport.xls");
-                Desktop.getDesktop().open(r);
-            } catch (IOException ex) 
+                try 
+                {
+                    MemberReport mr = new MemberReport(id);
+                    //automatic file opening
+                    File r = new File("Reports\\MemberReport.xls");
+                    Desktop.getDesktop().open(r);
+                } 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+            else
             {
-                Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this, "Invalid ID!");
             }
            
         }
         else if(ae.getSource().equals(viewProviderReportButton))
         {
-            try 
+            int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Provider ID"));
+            if(dbHelper.checkUserID(id, "provider"))
             {
-                ProviderReport pr = new ProviderReport();
-                //automatic file opening
-                File r = new File("Reports\\ProviderReport.xls");
-                Desktop.getDesktop().open(r);
-            } catch (IOException ex) 
-            {
-                Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                try 
+                {
+                    ProviderReport pr = new ProviderReport(id);
+                    //automatic file opening
+                    File r = new File("Reports\\ProviderReport.xls");
+                    Desktop.getDesktop().open(r);
+                } 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         else if(ae.getSource().equals(viewSummaryReportButton))
