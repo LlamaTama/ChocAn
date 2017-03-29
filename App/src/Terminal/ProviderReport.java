@@ -39,11 +39,11 @@ public class ProviderReport {
     
     public ProviderReport() throws FileNotFoundException, IOException
     {
-        HSSFWorkbook hwb = new HSSFWorkbook();
-        HSSFSheet sheet = hwb.createSheet("new sheet");
+        HSSFWorkbook hwb=new HSSFWorkbook();
+        HSSFSheet sheet =  hwb.createSheet("new sheet");
         
         //  creating cells
-        HSSFRow rowhead = sheet.createRow((short)0);
+        HSSFRow rowhead=   sheet.createRow((short)0);
         rowhead.createCell((int) 0).setCellValue("ID");
         rowhead.createCell((short) 1).setCellValue("Name");
         rowhead.createCell((short) 2).setCellValue("Address");
@@ -57,8 +57,8 @@ public class ProviderReport {
         
         try 
         {
-            Statement st = dbHelper.stmt;
-            ResultSet rs = st.executeQuery("select * from Provider");
+            Statement st= dbHelper.stmt;
+            ResultSet rs=st.executeQuery("select * from Provider");
         
         //  iteration for inserting values in rows
         int i=1;
@@ -73,13 +73,12 @@ public class ProviderReport {
         i++;
         }
         //  writing data to xls file
-        FileOutputStream fileOut = new FileOutputStream(filename);
+        FileOutputStream fileOut =  new FileOutputStream(filename);
         hwb.write(fileOut);
         fileOut.close();
         System.out.println("Your excel file has been generated!");
         
-        } 
-        catch (SQLException ex) 
+        } catch (SQLException ex) 
         {
             Logger.getLogger(MemberReport.class.getName()).log(Level.SEVERE, null, ex);
         }
