@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -222,5 +223,16 @@ public class DatabaseHelper
         close();
         
         return servicePrice;
+    }
+    
+    public ArrayList<String> getAppointmentDetails(int id)
+    {
+        open();
+        
+        ArrayList<String> appointmentDetails = new ArrayList<String>();
+        
+        close();
+        
+        return appointmentDetails;
     }
 }
