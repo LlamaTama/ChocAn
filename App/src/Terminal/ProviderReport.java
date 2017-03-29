@@ -35,47 +35,66 @@ public class ProviderReport
     private final int id;
     private final Date lastDate;
     private final Date currentDate;
+    private int rowCount = 0;
     
     //  name of excel file
-    String filename = "Reports\\ProviderReport.xls";
+    private final String filename;
     
-    public ProviderReport(int id, Date lastDate, Date currentDate) throws FileNotFoundException, IOException
+    public ProviderReport(int provID, Date lDate, Date cDate) throws FileNotFoundException, IOException
     {
-        this.id = id;
-        this.lastDate = lastDate;
-        this.currentDate = currentDate;
+        id = provID;
+        lastDate = lDate;
+        currentDate = cDate;
+        filename = "Reports\\ProviderReport" + id + lDate.toString() + " - " + cDate.toString() + ".xls";
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
-        
-        //  creating cells
-        HSSFRow rowhead = sheet.createRow((short)0);
-        rowhead.createCell((short) 0).setCellValue("ID");
-        rowhead.createCell((short) 1).setCellValue("Name");
-        rowhead.createCell((short) 2).setCellValue("Address");
-        rowhead.createCell((short) 3).setCellValue("State");
-        rowhead.createCell((short) 4).setCellValue("City");
-        rowhead.createCell((short) 5).setCellValue("Zip");
         
         //  database connection
         DatabaseHelper dbHelper = new DatabaseHelper();
         
         ArrayList<String[]> providerDetails = dbHelper.getUserDetails(id, "provider");
         Iterator<String []> providerIterator = providerDetails.iterator();
-        int i = 0;
         while(providerIterator.hasNext())
         {
             String[] details = providerIterator.next();
-            HSSFRow row =   sheet.createRow((short)i);
+            HSSFRow row = sheet.createRow((short)rowCount);
             row.createCell((short) 0).setCellValue(details[0]);
             row.createCell((short) 1).setCellValue(details[1]);
-            i++;
+            rowCount++;
         }
         
-        sheet.createRow(i);
-        sheet.createRow(i++);
+        sheet.createRow(rowCount);
+        sheet.createRow(rowCount++);
         
-        ArrayList<ArrayList> appointmentDetails = dbHelper.getAppointmentDetails(id, lastDate, currentDate);
+        HSSFRow titleRow = sheet.createRow(rowCount++);
+        titleRow.createCell((short) 0).setCellValue("Date of Service");
+        titleRow.createCell((short) 1).setCellValue("Received");
+        titleRow.createCell((short) 2).setCellValue("Member Name");
+        titleRow.createCell((short) 3).setCellValue("Member ID");
+        titleRow.createCell((short) 4).setCellValue("Service Code");
+        titleRow.createCell((short) 5).setCellValue("Service Fee");
+        
+        ArrayList<ArrayList> appointmentDetails = dbHelper.getProviderAppointmentDetails(id, lastDate, currentDate);
+        Iterator<ArrayList> appointmentIterator = appointmentDetails.iterator();
+        while(appointmentIterator.hasNext())
+        {
+            ArrayList<String[]> appointment = appointmentIterator.next();
+            String[] dateOfService = appointment.get(0);
+            String[] received = appointment.get(1);
+            String[] memberID = appointment.get(2);
+            String[] memberName = {"Member Name", dbHelper.getMemberName(Integer.parseInt(memberID[1]))};
+            String[] serviceCode = appointment.get(3);
+            String[] serviceFee = {"Service Fee", "" + dbHelper.getServicePrice(Integer.parseInt(serviceCode[1]))};
+            
+            HSSFRow row = sheet.createRow((short)rowCount);
+            row.createCell((short) 0).setCellValue(dateOfService[1]);
+            row.createCell((short) 1).setCellValue(received[1]);
+            row.createCell((short) 2).setCellValue(memberName[1]);
+            row.createCell((short) 3).setCellValue(memberID[1]);
+            row.createCell((short) 4).setCellValue(serviceCode[1]);
+            row.createCell((short) 5).setCellValue(serviceFee[1]);
+        }
         
         //  writing data to xls file
         FileOutputStream fileOut = new FileOutputStream(filename);
@@ -83,4 +102,9 @@ public class ProviderReport
         fileOut.close();
         System.out.println("Your excel file has been generated!"); 
     } 
+    
+    public String getFileName()
+    {
+        return filename;
+    }
 }
