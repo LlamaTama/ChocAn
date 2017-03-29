@@ -25,6 +25,8 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 
 /**
  *
@@ -36,6 +38,8 @@ public class ProviderReport
     private final Date lastDate;
     private final Date currentDate;
     private int rowCount = 0;
+    private int consultations = 0;
+    private int totalFee = 0;
     
     //  name of excel file
     private final String filename;
@@ -94,6 +98,29 @@ public class ProviderReport
             row.createCell((short) 3).setCellValue(memberID[1]);
             row.createCell((short) 4).setCellValue(serviceCode[1]);
             row.createCell((short) 5).setCellValue(serviceFee[1]);
+            rowCount++;
+            consultations++;
+            totalFee += Integer.parseInt(serviceFee[1]);
+        }
+        
+        HSSFRow totalRow = sheet.createRow(rowCount);
+        totalRow.createCell((short) 0).setCellValue("Total");
+        totalRow.createCell(1);
+        totalRow.createCell((short) 2).setCellValue("" + consultations);
+        totalRow.createCell(3);
+        totalRow.createCell(4);
+        totalRow.createCell((short) 5).setCellValue("" + totalFee);
+        
+        CellStyle style = hwb.createCellStyle();
+        Font f = hwb.createFont();
+        f.setBold(true);
+        style.setFont(f);
+        
+        for(int i = 0; i < 6; i++)
+        {
+            sheet.autoSizeColumn(i);
+            titleRow.getCell(i).setCellStyle(style);
+            totalRow.getCell(i).setCellStyle(style);
         }
         
         //  writing data to xls file
