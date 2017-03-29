@@ -42,7 +42,7 @@ public class MemberReport
         id = memID;
         lastDate = lDate;
         currentDate = cDate;
-        filename = "Reports\\MemberReport" + id + lDate.toString() + " - " + cDate.toString() + ".xls";
+        filename = "Reports\\MemberReport " + id + ".xls";
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
