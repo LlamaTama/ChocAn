@@ -46,7 +46,7 @@ public class Initializer
     
     public static Date getLastRunDate()
     {
-        Date lastRun;
+        Date lastRun = new Date();
         
         return lastRun;
     }
