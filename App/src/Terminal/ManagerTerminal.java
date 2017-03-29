@@ -27,9 +27,10 @@ import java.io.*;
  * @author vishc
  */
 import java.awt.Desktop;
+import java.util.Date;
 public class ManagerTerminal extends JFrame implements ActionListener
 {
-    private DatabaseHelper dbHelper;
+    private final DatabaseHelper dbHelper;
     
     private JButton viewMemberReportButton,
             viewProviderReportButton,
@@ -101,7 +102,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
             {
                 try 
                 {
-                    MemberReport mr = new MemberReport(id);
+                    MemberReport mr = new MemberReport(id, Initializer.getLastRunDate(), new Date());
                     //automatic file opening
                     File r = new File("Reports\\MemberReport.xls");
                     Desktop.getDesktop().open(r);
@@ -124,7 +125,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
             {
                 try 
                 {
-                    ProviderReport pr = new ProviderReport(id);
+                    ProviderReport pr = new ProviderReport(id, Initializer.getLastRunDate(), new Date());
                     //automatic file opening
                     File r = new File("Reports\\ProviderReport.xls");
                     Desktop.getDesktop().open(r);
