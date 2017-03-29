@@ -27,59 +27,71 @@ import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+
 
 /**
  *
  * @author vishc
  */
-public class ProviderReport 
+public class SummaryReport 
 {
     
     //  name of excel file
-    String filename = "Reports\\ProviderReport.xls";
+    String filename = "Reports\\SummaryReport.xls";
     
-    public ProviderReport() throws FileNotFoundException, IOException
+    public SummaryReport() throws FileNotFoundException, IOException
     {
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("new sheet");
         
-        //  creating cells
+         //  creating cells
         HSSFRow rowhead = sheet.createRow((short)0);
-        rowhead.createCell((short) 0).setCellValue("ID");
-        rowhead.createCell((short) 1).setCellValue("Name");
-        rowhead.createCell((short) 2).setCellValue("Address");
-        rowhead.createCell((short) 3).setCellValue("State");
-        rowhead.createCell((short) 4).setCellValue("City");
-        rowhead.createCell((short) 5).setCellValue("Zip");
+        rowhead.createCell((short) 0).setCellValue("Provider Name");
+        rowhead.createCell((short) 1).setCellValue("No. Consultation");
+        rowhead.createCell((short) 2).setCellValue("Overall Fee Total");
         
         //  databse connection
         DatabaseHelper dbHelper = new DatabaseHelper();
         dbHelper.open();
         
-        try 
+         try 
         {
             Statement st = dbHelper.stmt;
-            ResultSet rs = st.executeQuery("select * from Provider");
+            ResultSet rs = st.executeQuery("select Name from app.provider");
+            String name;
+            while(rs.next())
+            {
+                name = rs.getString("Name");
+            }
+            
+            
         
-        //  iteration for inserting values in rows
-        int i=1;
-        while(rs.next())
-        {
-            HSSFRow row=   sheet.createRow((short)i);
-            row.createCell((short) 0).setCellValue(Integer.toString(rs.getInt("ID")));
-            row.createCell((short) 1).setCellValue(rs.getString("Name"));
-            row.createCell((short) 2).setCellValue(rs.getString("Address"));
-            row.createCell((short) 3).setCellValue(rs.getString("State"));
-            row.createCell((short) 4).setCellValue(rs.getString("City"));
-            row.createCell((short) 5).setCellValue(Integer.toString(rs.getInt("Zip")));
-            i++;
-        }
-        
-        //  writing data to xls file
-        FileOutputStream fileOut = new FileOutputStream(filename);
-        hwb.write(fileOut);
-        fileOut.close();
-        System.out.println("Your excel file has been generated!");
+            //  iteration for inserting values in rows
+            int i=1;
+            while(rs.next())
+            {
+                HSSFRow row = sheet.createRow((short)i);
+                /*row.createCell((short) 0).setCellValue(name);
+                row.createCell((short) 1).setCellValue(noc);
+                row.createCell((short) 2).setCellValue(feetotal);*/
+                i++;
+            }
+            
+            //  writing data to xls file
+            FileOutputStream fileOut = new FileOutputStream(filename);
+            hwb.write(fileOut);
+            fileOut.close();
+            System.out.println("Your excel file has been generated!");
         
         } 
         catch (SQLException ex) 
@@ -89,5 +101,6 @@ public class ProviderReport
         
         
     }
+            
     
 }
