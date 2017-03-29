@@ -22,6 +22,8 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 
 
 /**
@@ -33,9 +35,10 @@ public class MemberReport
     private final int id;
     private final Date lastDate;
     private final Date currentDate;
+    private int rowCount = 0;
     
     //  name of excel file
-    private String filename;
+    private final String filename;
     
     public MemberReport(int memID, Date lDate, Date cDate) throws FileNotFoundException, IOException
     {
@@ -61,14 +64,49 @@ public class MemberReport
         
         ArrayList<String[]> memberDetails = dbHelper.getUserDetails(id, "member");
         Iterator<String []> memberIterator = memberDetails.iterator();
-        int i = 0;
+        
         while(memberIterator.hasNext())
         {
             String[] details = memberIterator.next();
-            HSSFRow row =   sheet.createRow((short)i);
+            HSSFRow row =   sheet.createRow((short)rowCount);
             row.createCell((short) 0).setCellValue(details[0]);
             row.createCell((short) 1).setCellValue(details[1]);
-            i++;
+            rowCount++;
+        }
+        
+        sheet.createRow(rowCount);
+        sheet.createRow(rowCount++);
+        
+        HSSFRow titleRow = sheet.createRow(rowCount++);
+        titleRow.createCell((short) 0).setCellValue("Date of Service");
+        titleRow.createCell((short) 1).setCellValue("Provider Name");
+        titleRow.createCell((short) 2).setCellValue("Service Name");
+        
+        ArrayList<ArrayList> appointmentDetails = dbHelper.getMemberAppointmentDetails(id, lastDate, currentDate);
+        Iterator<ArrayList> appointmentIterator = appointmentDetails.iterator();
+        while(appointmentIterator.hasNext())
+        {
+            ArrayList<String[]> appointment = appointmentIterator.next();
+            String[] dateOfService = appointment.get(0);
+            String[] providerName = {"Provider Name", dbHelper.getProviderName(Integer.parseInt((appointment.get(1))[1]))};
+            String[] serviceName = {"Service Name", dbHelper.getServiceName((appointment.get(2))[1])};
+            
+            HSSFRow row = sheet.createRow((short)rowCount);
+            row.createCell((short) 0).setCellValue(dateOfService[1]);
+            row.createCell((short) 1).setCellValue(providerName[1]);
+            row.createCell((short) 2).setCellValue(serviceName[1]);
+            rowCount++;
+        }
+        
+        CellStyle style = hwb.createCellStyle();
+        Font f = hwb.createFont();
+        f.setBold(true);
+        style.setFont(f);
+        
+        for(int i = 0; i < 3; i++)
+        {
+            sheet.autoSizeColumn(i);
+            titleRow.getCell(i).setCellStyle(style);
         }
         
         //  writing data to xls file
