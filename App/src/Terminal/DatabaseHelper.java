@@ -206,7 +206,8 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select FEES from app.provider_directory where \"Service Code\"=" + serviceCode);
+            PreparedStatement ps = conn.prepareStatement("select FEES from app.provider_directory where \"Service Code\"=?");
+            ps.setInt(1, serviceCode);
             
             ResultSet rs = ps.executeQuery();
             
@@ -225,11 +226,71 @@ public class DatabaseHelper
         return servicePrice;
     }
     
-    public ArrayList<String> getAppointmentDetails(int id)
+    public ArrayList<String[]> getUserDetails(int id, String type)
     {
         open();
         
-        ArrayList<String> appointmentDetails = new ArrayList<String>();
+        ArrayList<String[]> userDetails = new ArrayList<String[]>();
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select * from app." + type + "where id=?");
+            ps.setInt(1, id);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                userDetails.add(new String[]{"ID", "" + rs.getInt("ID")});
+                userDetails.add(new String[]{"Name", "" + rs.getString("Name")});
+                userDetails.add(new String[]{"Address", "" + rs.getString("Address")});
+                userDetails.add(new String[]{"State", rs.getString("State")});
+                userDetails.add(new String[]{"City", rs.getString("City")});
+                userDetails.add(new String[]{"ZIP", rs.getString("ZIP")});
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return userDetails;
+    }
+    
+    public ArrayList<String[]> getAppointmentDetails(int id)
+    {
+        open();
+        
+        ArrayList<String[]> appointmentDetails = new ArrayList<String[]>();
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where id=?");
+            ps.setInt(1, id);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                appointmentDetails.add(new String[]{"Member ID", "" + rs.getInt(1)});
+                appointmentDetails.add(new String[]{"Provider ID", "" + rs.getInt(2)});
+                appointmentDetails.add(new String[]{"Service Code", "" + rs.getInt(3)});
+                appointmentDetails.add(new String[]{"Date of Service", rs.getDate(4).toString()});
+                appointmentDetails.add(new String[]{"Current Date", rs.getDate(5).toString()});
+                appointmentDetails.add(new String[]{"Current Time", rs.getTime(7).toString()});
+                appointmentDetails.add(new String[]{"Comments", rs.getString(6)});
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
         
         close();
         
