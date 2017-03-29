@@ -216,6 +216,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
                     JOptionPane.showMessageDialog(this, "Fees due are " + dbHelper.getServicePrice(Integer.parseInt(serviceCodeTextField.getText())), "Success", JOptionPane.INFORMATION_MESSAGE);
                     
                     memberIDTextField.setText("");
+                    dateChooser.setDate(new Date());
                     serviceCodeTextField.setText("");
                     serviceNameTextField.setText("");
                     commentsTextArea.setText("");
