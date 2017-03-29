@@ -83,7 +83,7 @@ public class DatabaseHelper
         }
     }
     
-    public boolean checkUser(String tableName, String id, String pw) 
+    public boolean checkUser(String type, int id, String pw) 
     {
        open();
        
@@ -91,7 +91,11 @@ public class DatabaseHelper
        
        try 
        {
-           ResultSet rs = stmt.executeQuery("select * from " + tableName + " where id=" + id + " and pass='" + pw + "'");
+           PreparedStatement ps = conn.prepareStatement("select * from " + type + " where id=? and pass=?");
+           ps.setInt(1, id);
+           ps.setString(2, pw);
+           
+           ResultSet rs = ps.executeQuery();
 
            //  Getting data from result set
            if(rs.next())
