@@ -152,7 +152,7 @@ public class LoginTerminal extends JFrame implements ActionListener
     
     private void validateUser()
     {
-        String id = idTextField.getText();
+        int id = Integer.parseInt(idTextField.getText());
         String pw = new String(passwordField.getPassword());
         
         //Creating helper object to access database
