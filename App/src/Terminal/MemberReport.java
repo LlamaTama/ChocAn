@@ -35,11 +35,11 @@ public class MemberReport {
     
     public MemberReport() throws FileNotFoundException, IOException
     {
-        HSSFWorkbook hwb=new HSSFWorkbook();
-        HSSFSheet sheet =  hwb.createSheet("new sheet");
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        HSSFSheet sheet = hwb.createSheet("new sheet");
         
         //  creating cells
-        HSSFRow rowhead=   sheet.createRow((short)0);
+        HSSFRow rowhead = sheet.createRow((short)0);
         rowhead.createCell((int) 0).setCellValue("ID");
         rowhead.createCell((short) 1).setCellValue("Name");
         rowhead.createCell((short) 2).setCellValue("Address");
@@ -53,8 +53,8 @@ public class MemberReport {
         
         try 
         {
-            Statement st= dbHelper.stmt;
-            ResultSet rs=st.executeQuery("select * from Member");
+            Statement st = dbHelper.stmt;
+            ResultSet rs = st.executeQuery("select * from Member");
         
         //  iteration for inserting values in rows
         int i=1;
@@ -69,7 +69,7 @@ public class MemberReport {
         i++;
         }
         //  writing data to xls file
-        FileOutputStream fileOut =  new FileOutputStream(filename);
+        FileOutputStream fileOut = new FileOutputStream(filename);
         hwb.write(fileOut);
         fileOut.close();
         System.out.println("Your excel file has been generated!");
