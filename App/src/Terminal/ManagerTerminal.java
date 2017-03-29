@@ -89,16 +89,24 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         if(ae.getSource().equals(viewMemberReportButton))
         {
-            try {
+            try 
+            {
                 MemberReport mr = new MemberReport();
-            } catch (IOException ex) {
+            } catch (IOException ex) 
+            {
                 Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
             }
             
         }
         else if(ae.getSource().equals(viewProviderReportButton))
         {
-            
+            try 
+            {
+                ProviderReport pr = new ProviderReport();
+            } catch (IOException ex) 
+            {
+                Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
         else if(ae.getSource().equals(viewSummaryReportButton))
         {

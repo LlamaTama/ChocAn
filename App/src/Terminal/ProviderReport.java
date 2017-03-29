@@ -15,25 +15,29 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package Terminal;
-import  org.apache.poi.hssf.usermodel.HSSFSheet;  
-import  org.apache.poi.hssf.usermodel.HSSFWorkbook; 
-import  org.apache.poi.hssf.usermodel.HSSFRow;
-import  org.apache.poi.hssf.usermodel.HSSFCell; 
-import  java.io.*;  
-import  java.sql.*;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 
 /**
  *
  * @author vishc
  */
-public class MemberReport {
+public class ProviderReport {
     
     //  name of excel file
-    String filename="Reports\\MemberReport.xls";
+    String filename="Reports\\ProviderReport.xls";
     
-    public MemberReport() throws FileNotFoundException, IOException
+    public ProviderReport() throws FileNotFoundException, IOException
     {
         HSSFWorkbook hwb=new HSSFWorkbook();
         HSSFSheet sheet =  hwb.createSheet("new sheet");
@@ -54,7 +58,7 @@ public class MemberReport {
         try 
         {
             Statement st= dbHelper.stmt;
-            ResultSet rs=st.executeQuery("select * from Member");
+            ResultSet rs=st.executeQuery("select * from Provider");
         
         //  iteration for inserting values in rows
         int i=1;
