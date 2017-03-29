@@ -33,7 +33,7 @@ import net.miginfocom.swing.MigLayout;
  */
 public class ProviderTerminal extends JFrame implements ActionListener, KeyListener
 {
-    private final String providerID;
+    private final int providerID;
     private final DatabaseHelper dbHelper;
     private boolean serviceCodeValid;
     
@@ -57,7 +57,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
             commentsLabel;
     JDateChooser dateChooser;
     
-    private ProviderTerminal(String providerID)
+    private ProviderTerminal(int providerID)
     {
         //Calling super class constructor and setting layout constraints
         super();
@@ -187,7 +187,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         memberOperationPanel.add(submitDetailsButton, "cell 1 7, align right");
     }
     
-    public static void createProviderTerminal(String providerID)
+    public static void createProviderTerminal(int providerID)
     {
         ProviderTerminal pt = new ProviderTerminal(providerID);
     }
@@ -211,7 +211,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         {
             if(serviceCodeValid)
             {                
-                if(dbHelper.insertAppointment(Integer.parseInt(memberIDTextField.getText()), Integer.parseInt(providerID), Integer.parseInt(serviceCodeTextField.getText()), dateChooser.getDate(), new Date(), commentsTextArea.getText()))
+                if(dbHelper.insertAppointment(Integer.parseInt(memberIDTextField.getText()), providerID, Integer.parseInt(serviceCodeTextField.getText()), dateChooser.getDate(), new Date(), commentsTextArea.getText()))
                 {
                     JOptionPane.showMessageDialog(this, "Fees due are " + dbHelper.getServicePrice(Integer.parseInt(serviceCodeTextField.getText())), "Success", JOptionPane.INFORMATION_MESSAGE);
                     
@@ -259,6 +259,6 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
     
     public static void main(String args[])
     {
-        ProviderTerminal.createProviderTerminal("111111111");
+        ProviderTerminal.createProviderTerminal(111111111);
     }
 }
