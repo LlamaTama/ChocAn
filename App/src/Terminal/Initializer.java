@@ -18,6 +18,7 @@
 package Terminal;
 
 import java.awt.Font;
+import java.util.Date;
 
 /**
  *
@@ -41,5 +42,12 @@ public class Initializer
     public static Font getDefaultFont()
     {
         return defaultFont;
+    }
+    
+    public static Date getLastRunDate()
+    {
+        Date lastRun;
+        
+        return lastRun;
     }
 }
