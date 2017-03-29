@@ -37,11 +37,11 @@ public class MemberReport
     //  name of excel file
     String filename = "Reports\\MemberReport.xls";
     
-    public MemberReport(int id, Date lastDate, Date currentDate) throws FileNotFoundException, IOException
+    public MemberReport(int memID, Date lDate, Date cDate) throws FileNotFoundException, IOException
     {
-        this.id = id;
-        this.lastDate = lastDate;
-        this.currentDate = currentDate;
+        id = memID;
+        lastDate = lDate;
+        currentDate = cDate;
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
