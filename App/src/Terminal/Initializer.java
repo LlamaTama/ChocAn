@@ -18,7 +18,12 @@
 package Terminal;
 
 import java.awt.Font;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
+import java.util.Properties;
 
 /**
  *
@@ -44,9 +49,24 @@ public class Initializer
         return defaultFont;
     }
     
-    public static Date getLastRunDate()
+    public Date getLastRunDate()
     {
         Date lastRun = new Date();
+        
+        Properties p = new Properties();
+        
+        try
+        {
+            FileInputStream fis = new FileInputStream("config.properties");
+            
+            p.load(fis);
+            
+            lastRun = DateFormat.parse(p.getProperty("lastDate"));
+        }
+        catch(IOException | ParseException e)
+        {
+            System.out.println(e);
+        }
         
         return lastRun;
     }
