@@ -21,7 +21,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.time.LocalDate;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.logging.Level;
@@ -34,8 +34,8 @@ import java.util.logging.Logger;
 public class DatabaseHelper 
 {
     // JDBC driver name and database URL
-    String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
-    String DB_URL = "jdbc:derby:Database\\ChocAnDB";
+    private String JDBC_DRIVER = "org.apache.derby.jdbc.EmbeddedDriver";
+    private String DB_URL = "jdbc:derby:Database\\ChocAnDB";
     
     //  Database credentials
     private String USER = "";
@@ -43,6 +43,8 @@ public class DatabaseHelper
     
     public Connection conn;
     public Statement stmt;
+    
+    private final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
      
     public DatabaseHelper()
     {
@@ -317,7 +319,7 @@ public class DatabaseHelper
             while(rs.next())
             {
                 ArrayList<String[]> appointmentDetails = new ArrayList<>();
-                appointmentDetails.add(new String[]{"Date of Service", rs.getDate(1).toString()});
+                appointmentDetails.add(new String[]{"Date of Service", sdf.format(rs.getDate(1))});
                 appointmentDetails.add(new String[]{"Provider ID", "" + rs.getInt(2)});
                 appointmentDetails.add(new String[]{"Service Code", "" + rs.getInt(3)});
                 
@@ -357,8 +359,8 @@ public class DatabaseHelper
             {
                 ArrayList<String[]> appointmentDetails = new ArrayList<>();
                 
-                appointmentDetails.add(new String[]{"Date of Service", rs.getDate(4).toString()});
-                appointmentDetails.add(new String[]{"Received", rs.getDate(5).toString() + " " + rs.getTime(7).toString()});
+                appointmentDetails.add(new String[]{"Date of Service", sdf.format(rs.getDate(4))});
+                appointmentDetails.add(new String[]{"Received", sdf.format(rs.getDate(5)) + " " + rs.getTime(7).toString()});
                 appointmentDetails.add(new String[]{"Member ID", "" + rs.getInt(1)});
                 appointmentDetails.add(new String[]{"Service Code", "" + rs.getInt(3)});
 
@@ -386,6 +388,35 @@ public class DatabaseHelper
         try
         {
             PreparedStatement ps = conn.prepareStatement("select name from app.member where id=?");
+            ps.setInt(1, id);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next())
+            {
+                result = rs.getString(1);
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return result;
+    }
+    
+    public String getProviderName(int id)
+    {
+        open();
+        
+        String result = "";
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select name from app.provider where id=?");
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
             
