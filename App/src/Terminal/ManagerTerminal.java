@@ -106,7 +106,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
                 {
                     MemberReport mr = new MemberReport(id, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                     //automatic file opening
-                    File r = new File("Reports\\MemberReport.xls");
+                    File r = new File(mr.getFileName());
                     Desktop.getDesktop().open(r);
                 } 
                 catch (IOException ex) 
@@ -133,7 +133,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
                 {
                     ProviderReport pr = new ProviderReport(id, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                     //automatic file opening
-                    File r = new File("Reports\\ProviderReport.xls");
+                    File r = new File(pr.getFileName());
                     Desktop.getDesktop().open(r);
                 } 
                 catch (IOException ex) 
