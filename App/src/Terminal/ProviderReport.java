@@ -34,12 +34,15 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
  */
 public class ProviderReport 
 {
+    private int id;
     
     //  name of excel file
     String filename = "Reports\\ProviderReport.xls";
     
-    public ProviderReport() throws FileNotFoundException, IOException
+    public ProviderReport(int id) throws FileNotFoundException, IOException
     {
+        this.id = id;
+        
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("new sheet");
         
