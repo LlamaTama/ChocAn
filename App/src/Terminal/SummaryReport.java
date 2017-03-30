@@ -28,6 +28,7 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import java.io.FileOutputStream;
+import java.sql.Connection;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -37,6 +38,7 @@ import java.util.logging.Logger;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import java.util.stream.*;
 
 
 /**
@@ -63,30 +65,58 @@ public class SummaryReport
         //  databse connection
         DatabaseHelper dbHelper = new DatabaseHelper();
         dbHelper.open();
-        
+        Connection con = dbHelper.conn;
          try 
         {
             Statement st = dbHelper.stmt;
-            ResultSet rs = st.executeQuery("select Name from app.provider");
-            String name;
-            while(rs.next())
-            {
-                name = rs.getString("Name");
-            }
-            
-            
-        
-            //  iteration for inserting values in rows
+            Statement st1 = con.createStatement();
+            Statement st2 = con.createStatement();
+            Statement st3 = con.createStatement();
+            ResultSet rs = st.executeQuery("select distinct \"Provider ID\" from app.appointment ");
+           
+            String name[] = new String [10];
+            int fees[] = new int[10];
+            int id [] = new int[10];
+            int id1 [] = new int[10];
+            int noc=0;
+            int sc[] = new int[10];
+           int feestotal;
             int i=1;
+            
+           HSSFRow row = sheet.createRow((short)i);
             while(rs.next())
             {
-                HSSFRow row = sheet.createRow((short)i);
-                /*row.createCell((short) 0).setCellValue(name);
+                
+                name[i] = rs.getString("Name");
+                id[i] = rs.getInt("Provider ID");
+            
+               ResultSet rs3 = st3.executeQuery("select distinct \"Service Code\" from appointment");
+                rs3.next();
+                sc[i] = rs3.getInt("Service Code");
+               ResultSet rs2 = st2.executeQuery("select distinct fees from provider_directory where \"Service Code\"="+ sc[i]);
+               ResultSet rs1 = st1.executeQuery("select count(*) from appointment where \"Provider ID\"="+id[i]);
+               rs1.next();
+               noc=rs1.getInt("1");
+                
+               rs2.next();
+               fees[i] = rs2.getInt("Fees");
+                
+               // feestotal = fees[i]
+              
+              
+               
+               
+               
+                row.createCell((short) 0).setCellValue(name[i]);
                 row.createCell((short) 1).setCellValue(noc);
-                row.createCell((short) 2).setCellValue(feetotal);*/
                 i++;
             }
             
+            
+             //row.createCell((short) 2).setCellValue(feestotal);
+             
+             
+             
             //  writing data to xls file
             FileOutputStream fileOut = new FileOutputStream(filename);
             hwb.write(fileOut);
