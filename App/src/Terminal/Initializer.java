@@ -55,7 +55,7 @@ public class Initializer
         
         try
         {
-            FileInputStream fis = new FileInputStream("config.properties");
+            FileInputStream fis = new FileInputStream("src\\Resources\\config.properties");
             
             p.load(fis);
             
