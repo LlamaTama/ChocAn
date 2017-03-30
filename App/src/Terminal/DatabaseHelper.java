@@ -492,4 +492,33 @@ public class DatabaseHelper
         
         return providerID;
     }
+    
+    public ArrayList<String []> getAllServices()
+    {
+        open();
+        
+        ArrayList<String[]> services = new ArrayList<>();
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select * from app.provider_directory");
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                String service[] = {rs.getString(1), ""+ rs.getInt(2), ""+ rs.getInt(3)};
+                services.add(service);
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return services;
+    }
 }
