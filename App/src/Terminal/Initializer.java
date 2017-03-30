@@ -29,7 +29,8 @@ import java.util.Properties;
  */
 public class Initializer 
 {
-    private static Font defaultFont = new Font("DejaVu Sans", Font.PLAIN, 22);
+    private final static Font DEFAULT_FONT = new Font("DejaVu Sans", Font.PLAIN, 22);
+    private final static String HOME_DIRECTORY = System.getProperty("user.home");
     
     public static void main(String args[])
     {
@@ -44,7 +45,12 @@ public class Initializer
     
     public static Font getDefaultFont()
     {
-        return defaultFont;
+        return DEFAULT_FONT;
+    }
+    
+    public static String getHomeDirectory()
+    {
+        return HOME_DIRECTORY;
     }
     
     public static String getLastRunDate()
