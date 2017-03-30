@@ -150,9 +150,9 @@ public class ManagerTerminal extends JFrame implements ActionListener
         {
             try 
             {
-                SummaryReport pr = new SummaryReport(new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
+                SummaryReport sr = new SummaryReport(new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                 //automatic file opening
-                File r = new File("Reports\\SummaryReport.xls");
+                File r = new File(sr.getFileName());
                 Desktop.getDesktop().open(r);
             } 
             catch (IOException ex) 
