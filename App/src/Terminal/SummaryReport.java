@@ -19,26 +19,15 @@ package Terminal;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import java.io.FileOutputStream;
-import java.sql.Connection;
-import java.io.IOException;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import org.apache.poi.hssf.usermodel.HSSFRow;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import java.util.stream.*;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Font;
 
 
 /**
@@ -47,90 +36,79 @@ import java.util.stream.*;
  */
 public class SummaryReport 
 {
+    private final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+    private final Date lastDate;
+    private final Date currentDate;
+    private final DatabaseHelper dbHelper = new DatabaseHelper();
+    private int rowCount = 0;
+    private int totalConsultations = 0;
+    private int totalFee = 0;
     
     //  name of excel file
-    String filename = "Reports\\SummaryReport.xls";
+    private final String filename = Initializer.getHomeDirectory() + "\\Summary Report.xls";
     
-    public SummaryReport() throws FileNotFoundException, IOException
+    public SummaryReport(Date lDate, Date cDate) throws FileNotFoundException, IOException
     {
+        lastDate = lDate;
+        currentDate = cDate;
         HSSFWorkbook hwb = new HSSFWorkbook();
-        HSSFSheet sheet = hwb.createSheet("new sheet");
+        HSSFSheet sheet = hwb.createSheet(sdf.format(new Date()));
         
-         //  creating cells
-        HSSFRow rowhead = sheet.createRow((short)0);
-        rowhead.createCell((short) 0).setCellValue("Provider Name");
-        rowhead.createCell((short) 1).setCellValue("No. Consultation");
-        rowhead.createCell((short) 2).setCellValue("Overall Fee Total");
+         //  creating title row
+        HSSFRow titleRow = sheet.createRow((short)rowCount);
+        titleRow.createCell((short) 0).setCellValue("Provider Name");
+        titleRow.createCell((short) 1).setCellValue("Consultations");
+        titleRow.createCell((short) 2).setCellValue("Fee");
         
-        //  databse connection
-        DatabaseHelper dbHelper = new DatabaseHelper();
-        dbHelper.open();
-        Connection con = dbHelper.conn;
-         try 
+        ArrayList<Integer> providers = dbHelper.getActiveProviders(lastDate, currentDate);
+        Iterator<Integer> providerIterator = providers.iterator();
+        while(providerIterator.hasNext())
         {
-            Statement st = dbHelper.stmt;
-            Statement st1 = con.createStatement();
-            Statement st2 = con.createStatement();
-            Statement st3 = con.createStatement();
-            ResultSet rs = st.executeQuery("select distinct \"Provider ID\" from app.appointment ");
-           
-            String name[] = new String [10];
-            int fees[] = new int[10];
-            int id [] = new int[10];
-            int id1 [] = new int[10];
-            int noc=0;
-            int sc[] = new int[10];
-           int feestotal;
-            int i=1;
-            
-           HSSFRow row = sheet.createRow((short)i);
-            while(rs.next())
+            rowCount++;
+            int fee = 0;
+            int consultations = 0;
+            int id = providerIterator.next();
+            ArrayList<Integer> services = dbHelper.getActiveProviderServices(id, lastDate, currentDate);
+            Iterator<Integer> serviceIterator = services.iterator();
+            while(serviceIterator.hasNext())
             {
-                
-                name[i] = rs.getString("Name");
-                id[i] = rs.getInt("Provider ID");
-            
-               ResultSet rs3 = st3.executeQuery("select distinct \"Service Code\" from appointment");
-                rs3.next();
-                sc[i] = rs3.getInt("Service Code");
-               ResultSet rs2 = st2.executeQuery("select distinct fees from provider_directory where \"Service Code\"="+ sc[i]);
-               ResultSet rs1 = st1.executeQuery("select count(*) from appointment where \"Provider ID\"="+id[i]);
-               rs1.next();
-               noc=rs1.getInt("1");
-                
-               rs2.next();
-               fees[i] = rs2.getInt("Fees");
-                
-               // feestotal = fees[i]
-              
-              
-               
-               
-               
-                row.createCell((short) 0).setCellValue(name[i]);
-                row.createCell((short) 1).setCellValue(noc);
-                i++;
+                consultations++;
+                fee += dbHelper.getServicePrice(serviceIterator.next());
             }
             
+            HSSFRow row = sheet.createRow((short)rowCount);
+            row.createCell((short) 0).setCellValue(dbHelper.getProviderName(id));
+            row.createCell((short) 1).setCellValue("" + consultations);
+            row.createCell((short) 2).setCellValue("" + fee);
             
-             //row.createCell((short) 2).setCellValue(feestotal);
-             
-             
-             
-            //  writing data to xls file
-            FileOutputStream fileOut = new FileOutputStream(filename);
-            hwb.write(fileOut);
-            fileOut.close();
-            System.out.println("Your excel file has been generated!");
-        
-        } 
-        catch (SQLException ex) 
-        {
-            Logger.getLogger(MemberReport.class.getName()).log(Level.SEVERE, null, ex);
+            totalConsultations += consultations;
+            totalFee += fee;
         }
         
+        HSSFRow totalRow = sheet.createRow(rowCount);
+        totalRow.createCell((short) 0).setCellValue("Total");
+        totalRow.createCell(1);
+        totalRow.createCell((short) 2).setCellValue("" + totalConsultations);
+        totalRow.createCell(3);
+        totalRow.createCell(4);
+        totalRow.createCell((short) 5).setCellValue("" + totalFee);
         
+        CellStyle style = hwb.createCellStyle();
+        Font f = hwb.createFont();
+        f.setBold(true);
+        style.setFont(f);
+        
+        for(int i = 0; i < 3; i++)
+        {
+            sheet.autoSizeColumn(i);
+            titleRow.getCell(i).setCellStyle(style);
+            totalRow.getCell(i).setCellStyle(style);
+        }
+        
+        //  writing data to xls file
+        FileOutputStream fileOut = new FileOutputStream(filename);
+        hwb.write(fileOut);
+        fileOut.close();
+        System.out.println("Your excel file has been generated!"); 
     }
-            
-    
 }
