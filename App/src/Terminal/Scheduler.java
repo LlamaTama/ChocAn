@@ -16,9 +16,12 @@
  */
 package Terminal;
 
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.logging.Level;
@@ -30,18 +33,38 @@ import java.util.logging.Logger;
  */
 public class Scheduler 
 {
-    public static void generateReports()
+    public static void generateReports() throws ParseException, IOException
     {
+        DatabaseHelper dbHelper = new DatabaseHelper();
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(3);
         
         try 
         {
-            
             Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate());
         } 
         catch (ParseException ex) 
         {
             Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
+        ArrayList<Integer> members = dbHelper.getAllMembers();
+        Iterator<Integer> memberIterator = members.iterator();
+        while (memberIterator.hasNext())
+        {
+            Integer current = memberIterator.next();
+            MemberReport mr = new MemberReport(current, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
+        }
+        
+        ArrayList<Integer> providers = dbHelper.getAllProviders();
+        Iterator<Integer> providerIterator = providers.iterator();
+        while (providerIterator.hasNext())
+        {
+            Integer current = providerIterator.next();
+            ProviderReport pr = new ProviderReport(current, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
+        }
+        
+      
+        
+        
     }
 }
