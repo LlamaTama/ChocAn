@@ -148,6 +148,17 @@ public class ManagerTerminal extends JFrame implements ActionListener
         }
         else if(ae.getSource().equals(viewSummaryReportButton))
         {
+            try 
+                {
+                    SummaryReport pr = new SummaryReport();
+                    //automatic file opening
+                    File r = new File("Reports\\SummaryReport.xls");
+                    Desktop.getDesktop().open(r);
+                } 
+                catch (IOException ex) 
+                {
+                    Logger.getLogger(ManagerTerminal.class.getName()).log(Level.SEVERE, null, ex);
+                }
             
         }
     }
