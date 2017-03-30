@@ -565,7 +565,7 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select \"Service Code\" from app.appointment where \"Provider ID\"=? \"Date of Service\">=? and \"Date of Service\"<?");
+            PreparedStatement ps = conn.prepareStatement("select \"Service Code\" from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<?");
             ps.setInt(1, id);
             ps.setDate(2, lDate);
             ps.setDate(3, cDate);
