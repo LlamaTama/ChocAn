@@ -521,4 +521,71 @@ public class DatabaseHelper
         
         return services;
     }
+    
+    public ArrayList<Integer> getActiveProviders(Date lastDate, Date currentDate)
+    {
+        open();
+        
+        ArrayList<Integer> providers = new ArrayList<>();
+        java.sql.Date lDate = new java.sql.Date(lastDate.getTime());
+        java.sql.Date cDate = new java.sql.Date(currentDate.getTime());
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select distinct \"Provider ID\" from app.appointment where \"Date of Service\">=? and \"Date of Service\"<?");
+            ps.setDate(1, lDate);
+            ps.setDate(2, cDate);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                providers.add(rs.getInt(1));
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return providers;
+    }
+    
+    public ArrayList<Integer> getActiveProviderServices(int id, Date lastDate, Date currentDate)
+    {
+        open();
+        
+        ArrayList<Integer> services = new ArrayList<>();
+        java.sql.Date lDate = new java.sql.Date(lastDate.getTime());
+        java.sql.Date cDate = new java.sql.Date(currentDate.getTime());
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select \"Service Code\" from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<?");
+            ps.setInt(1, id);
+            ps.setDate(2, lDate);
+            ps.setDate(3, cDate);
+            
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                services.add(rs.getInt(1));
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return services;
+    }
 }
