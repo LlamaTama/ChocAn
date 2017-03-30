@@ -309,7 +309,7 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select \"Date of Service\", \"Provider ID\", \"Service Code\" from app.appointment where \"Member ID\"=? and \"Date of Service\">=? and \"Date of Service\"<?");
+            PreparedStatement ps = conn.prepareStatement("select \"Date of Service\", \"Provider ID\", \"Service Code\" from app.appointment where \"Member ID\"=? and \"Date of Service\">=? and \"Date of Service\"<? order by \"Date of Service\"");
             ps.setInt(1, id);
             ps.setDate(2, lDate);
             ps.setDate(3, cDate);
@@ -348,7 +348,7 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<?");
+            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<? order by \"Date of Service\"");
             ps.setInt(1, id);
             ps.setDate(2, lDate);
             ps.setDate(3, cDate);
@@ -435,5 +435,61 @@ public class DatabaseHelper
         close();
         
         return result;
+    }
+    
+    public ArrayList<Integer> getAllMembers()
+    {
+        open();
+        
+        ArrayList<Integer> memberID = new ArrayList<>();
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select id from app.member");
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                memberID.add(rs.getInt(1));
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return memberID;
+    }
+    
+    public ArrayList<Integer> getAllProviders()
+    {
+        open();
+        
+        ArrayList<Integer> providerID = new ArrayList<>();
+        
+        try
+        {
+            PreparedStatement ps = conn.prepareStatement("select id from app.provider");
+            ResultSet rs = ps.executeQuery();
+            
+            while(rs.next())
+            {
+                providerID.add(rs.getInt(1));
+            }
+            
+            rs.close();
+        }
+        catch(SQLException se)
+        {
+            System.out.println(se);
+        }
+        
+        close();
+        
+        return providerID;
     }
 }
