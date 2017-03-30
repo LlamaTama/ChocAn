@@ -94,17 +94,9 @@ public class Scheduler
                 Thread.sleep(60000);
             }
         }
-        catch(InterruptedException ie)
+        catch(InterruptedException | ParseException | IOException ie)
         {
             System.out.println(ie);
-        }
-        catch(ParseException pe)
-        {
-            System.out.println(pe);
-        }
-        catch(IOException ioe)
-        {
-            System.out.println(ioe);
         }
     }
 }
