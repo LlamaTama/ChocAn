@@ -61,6 +61,7 @@ public class SummaryReport
         titleRow.createCell((short) 1).setCellValue("Consultations");
         titleRow.createCell((short) 2).setCellValue("Fee");
         
+        //get providers who provided services in the last week
         ArrayList<Integer> providers = dbHelper.getActiveProviders(lastDate, currentDate);
         Iterator<Integer> providerIterator = providers.iterator();
         while(providerIterator.hasNext())
@@ -76,6 +77,7 @@ public class SummaryReport
                 fee += dbHelper.getServicePrice(serviceIterator.next());
             }
             
+            //add rows for each provider for the week
             HSSFRow row = sheet.createRow((short)++rowCount);
             row.createCell((short) 0).setCellValue(dbHelper.getProviderName(id));
             row.createCell((short) 1).setCellValue("" + consultations);
@@ -86,16 +88,19 @@ public class SummaryReport
             providerCount++;
         }
         
+        //row with totals
         HSSFRow totalRow = sheet.createRow(++rowCount);
         totalRow.createCell((short) 0).setCellValue("Total = " + providerCount);
         totalRow.createCell((short) 1).setCellValue("" + totalConsultations);
         totalRow.createCell((short) 2).setCellValue("" + totalFee);
         
+        //bold style for rows
         CellStyle style = hwb.createCellStyle();
         Font f = hwb.createFont();
         f.setBold(true);
         style.setFont(f);
         
+        //autosize columns
         for(int i = 0; i < 3; i++)
         {
             sheet.autoSizeColumn(i);

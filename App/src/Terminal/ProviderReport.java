@@ -60,10 +60,12 @@ public class ProviderReport
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
         
+        //get all details of provider with id
         ArrayList<String[]> providerDetails = dbHelper.getUserDetails(id, "provider");
         Iterator<String []> providerIterator = providerDetails.iterator();
         while(providerIterator.hasNext())
         {
+            //write details to cells
             String[] details = providerIterator.next();
             HSSFRow row = sheet.createRow((short)rowCount);
             row.createCell((short) 0).setCellValue(details[0]);
@@ -74,6 +76,7 @@ public class ProviderReport
         sheet.createRow(rowCount);
         sheet.createRow(rowCount++);
         
+        //title row for appointment details
         HSSFRow titleRow = sheet.createRow(rowCount++);
         titleRow.createCell((short) 0).setCellValue("Date of Service");
         titleRow.createCell((short) 1).setCellValue("Received");
@@ -86,6 +89,7 @@ public class ProviderReport
         Iterator<ArrayList> appointmentIterator = appointmentDetails.iterator();
         while(appointmentIterator.hasNext())
         {
+            //appointment details
             ArrayList<String[]> appointment = appointmentIterator.next();
             String[] dateOfService = appointment.get(0);
             String[] received = appointment.get(1);
@@ -101,11 +105,15 @@ public class ProviderReport
             row.createCell((short) 3).setCellValue(memberID[1]);
             row.createCell((short) 4).setCellValue(serviceCode[1]);
             row.createCell((short) 5).setCellValue(serviceFee[1]);
+            
             rowCount++;
             consultations++;
+            
+            //running count of total fee provider is owed
             totalFee += Integer.parseInt(serviceFee[1]);
         }
         
+        //row for totals
         HSSFRow totalRow = sheet.createRow(rowCount);
         totalRow.createCell((short) 0).setCellValue("Total");
         totalRow.createCell(1);

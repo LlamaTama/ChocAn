@@ -99,6 +99,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
     {
         if(ae.getSource().equals(viewMemberReportButton))
         {
+            //get id for member report
             int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Member ID"));
             if(dbHelper.checkUserID(id, "member"))
             {
@@ -126,6 +127,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
         }
         else if(ae.getSource().equals(viewProviderReportButton))
         {
+            //get id for provider report
             int id = Integer.parseInt(JOptionPane.showInputDialog("Enter Provider ID"));
             if(dbHelper.checkUserID(id, "provider"))
             {
@@ -150,6 +152,7 @@ public class ManagerTerminal extends JFrame implements ActionListener
         {
             try 
             {
+                //create and open summary report
                 SummaryReport sr = new SummaryReport(new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
                 //automatic file opening
                 File r = new File(sr.getFileName());

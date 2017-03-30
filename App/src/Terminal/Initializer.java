@@ -29,6 +29,7 @@ import java.util.Properties;
  */
 public class Initializer 
 {
+    //global values for other classes to use
     private final static Font DEFAULT_FONT = new Font("DejaVu Sans", Font.PLAIN, 22);
     private final static String HOME_DIRECTORY = System.getProperty("user.home");
     
@@ -48,6 +49,7 @@ public class Initializer
         return HOME_DIRECTORY;
     }
     
+    //returns date the scheduler was last run
     public static String getLastRunDate()
     {
         String lastRun = new Date().toString();

@@ -85,6 +85,7 @@ public class DatabaseHelper
         }
     }
     
+    //validate user credentials
     public boolean checkUser(String type, int id, String pw) 
     {
        open();
@@ -118,6 +119,7 @@ public class DatabaseHelper
        return result;
     }
     
+    //check if user exists
     public boolean checkUserID(int id, String type)
     {
         open();
@@ -150,6 +152,7 @@ public class DatabaseHelper
        return result;
     }
     
+    //get service name from service code
     public String getServiceName(String serviceCode)
     {
         open();
@@ -177,6 +180,7 @@ public class DatabaseHelper
         return result;
     }
     
+    //check if service code is valid
     public boolean checkServiceCode(String serviceCode)
     {
         open();
@@ -204,6 +208,7 @@ public class DatabaseHelper
         return result;
     }
     
+    //insert appointment details
     public boolean insertAppointment(int memberID, int providerID, int serviceCode, Date serviceDate, Date currentDate, String comments)
     {
         open();
@@ -236,6 +241,7 @@ public class DatabaseHelper
         return result;
     }
     
+    //get service fee from service code
     public int getServicePrice(int serviceCode)
     {
         open();
@@ -264,6 +270,7 @@ public class DatabaseHelper
         return servicePrice;
     }
     
+    //get details of user with specified id
     public ArrayList<String[]> getUserDetails(int id, String type)
     {
         open();
@@ -299,6 +306,7 @@ public class DatabaseHelper
         return userDetails;
     }
     
+    //get appointment details for member within specified date range
     public ArrayList<ArrayList> getMemberAppointmentDetails(int id, Date lastDate, Date currentDate)
     {
         open();
@@ -338,6 +346,7 @@ public class DatabaseHelper
         return appointments;
     }
     
+    //get appointment details for provider within specified date range
     public ArrayList<ArrayList> getProviderAppointmentDetails(int id, Date lastDate, Date currentDate)
     {
         open();
@@ -379,6 +388,7 @@ public class DatabaseHelper
         return appointments;
     }
     
+    //get member name from id
     public String getMemberName(int id)
     {
         open();
@@ -408,6 +418,7 @@ public class DatabaseHelper
         return result;
     }
     
+    //get provider name from id
     public String getProviderName(int id)
     {
         open();
@@ -437,6 +448,7 @@ public class DatabaseHelper
         return result;
     }
     
+    //get id of all members
     public ArrayList<Integer> getAllMembers()
     {
         open();
@@ -465,6 +477,7 @@ public class DatabaseHelper
         return memberID;
     }
     
+    //get id of all providers
     public ArrayList<Integer> getAllProviders()
     {
         open();
@@ -493,6 +506,7 @@ public class DatabaseHelper
         return providerID;
     }
     
+    //get list of all services
     public ArrayList<String []> getAllServices()
     {
         open();
@@ -522,6 +536,7 @@ public class DatabaseHelper
         return services;
     }
     
+    //get list of all providers who provided a service in the specified date range
     public ArrayList<Integer> getActiveProviders(Date lastDate, Date currentDate)
     {
         open();
@@ -555,6 +570,7 @@ public class DatabaseHelper
         return providers;
     }
     
+    //get services offered by provider within specified date range
     public ArrayList<Integer> getActiveProviderServices(int id, Date lastDate, Date currentDate)
     {
         open();

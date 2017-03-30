@@ -42,6 +42,7 @@ public class Scheduler
         Date startDate = sdf.parse(Initializer.getLastRunDate());
         Date endDate = new Date();
         
+        //get list of all members
         ArrayList<Integer> members = dbHelper.getAllMembers();
         Iterator<Integer> memberIterator = members.iterator();
         while (memberIterator.hasNext())
@@ -50,6 +51,7 @@ public class Scheduler
             MemberReport mr = new MemberReport(current, startDate,endDate);
         }
         
+        //get list of all providers
         ArrayList<Integer> providers = dbHelper.getAllProviders();
         Iterator<Integer> providerIterator = providers.iterator();
         while (providerIterator.hasNext())
@@ -60,6 +62,7 @@ public class Scheduler
         
         SummaryReport sr = new SummaryReport(startDate, endDate);
         
+        //update last run date
         Properties p = new Properties();
         
         try
@@ -82,6 +85,7 @@ public class Scheduler
         {
             while(true)
             {
+                //check if !2:00 am on Friday
                 Calendar c = new GregorianCalendar(Locale.CANADA);
                 int currentHour = c.get(Calendar.HOUR_OF_DAY);
                 int currentDay = c.get(Calendar.DAY_OF_WEEK);
