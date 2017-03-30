@@ -76,7 +76,7 @@ public class Scheduler
         }
     }
     
-    public static void schedule() throws ParseException, IOException
+    public static void schedule()
     {
         try
         {
@@ -97,6 +97,14 @@ public class Scheduler
         catch(InterruptedException ie)
         {
             System.out.println(ie);
+        }
+        catch(ParseException pe)
+        {
+            System.out.println(pe);
+        }
+        catch(IOException ioe)
+        {
+            System.out.println(ioe);
         }
     }
 }
