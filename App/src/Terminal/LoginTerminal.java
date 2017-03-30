@@ -78,6 +78,7 @@ public class LoginTerminal extends JFrame implements ActionListener
         passwordLabel = new JLabel("Password");
         passwordLabel.setFont(Initializer.getDefaultFont());
         
+        //allows selection for user type - provider/manager
         providerTypeRadioButton = new JRadioButton("Provider");
         providerTypeRadioButton.setFont(Initializer.getDefaultFont());
         providerTypeRadioButton.setSelected(true);

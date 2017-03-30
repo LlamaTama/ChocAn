@@ -203,14 +203,17 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         String filename = Initializer.getHomeDirectory() + "\\Provider Directory.xls";
         int rowCount = 0;
         
+        //create workbook
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Services");
         
+        //create title row
         HSSFRow titleRow = sheet.createRow(rowCount);
         titleRow.createCell((short) 0).setCellValue("Service Name");
         titleRow.createCell((short) 1).setCellValue("Service Code");
         titleRow.createCell((short) 2).setCellValue("Service Fee");
         
+        //get all services
         ArrayList<String[]> services = dbHelper.getAllServices();
         Iterator<String[]> servicesIterator = services.iterator();
         while(servicesIterator.hasNext())
@@ -222,17 +225,20 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
             row.createCell((short) 2).setCellValue(service[2]);
         }
         
+        //bold style for rows
         CellStyle style = hwb.createCellStyle();
         org.apache.poi.ss.usermodel.Font f = hwb.createFont();
         f.setBold(true);
         style.setFont(f);
         
+        //autosize columns
         for(int i = 0; i < 3; i++)
         {
             sheet.autoSizeColumn(i);
             titleRow.getCell(i).setCellStyle(style);
         }
         
+        //write file
         try (FileOutputStream fileOut = new FileOutputStream(filename)) 
         {
             hwb.write(fileOut);
@@ -274,7 +280,8 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         else if(ae.getSource().equals(submitDetailsButton))
         {
             if(serviceCodeValid)
-            {                
+            {        
+                //insert appointment details
                 if(dbHelper.insertAppointment(Integer.parseInt(memberIDTextField.getText()), providerID, Integer.parseInt(serviceCodeTextField.getText()), dateChooser.getDate(), new Date(), commentsTextArea.getText()))
                 {
                     JOptionPane.showMessageDialog(this, "Fees due are " + dbHelper.getServicePrice(Integer.parseInt(serviceCodeTextField.getText())), "Success", JOptionPane.INFORMATION_MESSAGE);
@@ -293,6 +300,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
     @Override
     public void keyReleased(KeyEvent ke)
     {
+        //get service name from service code
         if(ke.getSource().equals(serviceCodeTextField))
         {
             if(serviceCodeTextField.getText().length()==6)

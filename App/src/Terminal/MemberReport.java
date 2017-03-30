@@ -65,6 +65,7 @@ public class MemberReport
         rowhead.createCell((short) 4).setCellValue("City");
         rowhead.createCell((short) 5).setCellValue("Zip");
         
+        //get details for member with specified id
         ArrayList<String[]> memberDetails = dbHelper.getUserDetails(id, "member");
         Iterator<String []> memberIterator = memberDetails.iterator();
         
@@ -80,15 +81,18 @@ public class MemberReport
         sheet.createRow(rowCount);
         sheet.createRow(rowCount++);
         
+        //create title row
         HSSFRow titleRow = sheet.createRow(rowCount++);
         titleRow.createCell((short) 0).setCellValue("Date of Service");
         titleRow.createCell((short) 1).setCellValue("Provider Name");
         titleRow.createCell((short) 2).setCellValue("Service Name");
         
+        //get all appointments for member in the last week
         ArrayList<ArrayList> appointmentDetails = dbHelper.getMemberAppointmentDetails(id, lastDate, currentDate);
         Iterator<ArrayList> appointmentIterator = appointmentDetails.iterator();
         while(appointmentIterator.hasNext())
         {
+            //appointment details
             ArrayList<String[]> appointment = appointmentIterator.next();
             String[] dateOfService = appointment.get(0);
             String[] providerName = {"Provider Name", dbHelper.getProviderName(Integer.parseInt((appointment.get(1))[1]))};
@@ -101,11 +105,13 @@ public class MemberReport
             rowCount++;
         }
         
+        //bold style for cells
         CellStyle style = hwb.createCellStyle();
         Font f = hwb.createFont();
         f.setBold(true);
         style.setFont(f);
         
+        //autosize columns
         for(int i = 0; i < 3; i++)
         {
             sheet.autoSizeColumn(i);
