@@ -23,9 +23,20 @@ import com.toedter.calendar.JTextFieldDateEditor;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.text.DefaultStyledDocument;
 import net.miginfocom.swing.MigLayout;
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.CellStyle;
 
 /**
  *
@@ -187,6 +198,59 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         memberOperationPanel.add(submitDetailsButton, "cell 1 7, align right");
     }
     
+    private void createAndShowProviderDirectory()
+    {
+        String filename = Initializer.getHomeDirectory() + "\\Provider Directory.xls";
+        int rowCount = 0;
+        
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        HSSFSheet sheet = hwb.createSheet("Services");
+        
+        HSSFRow titleRow = sheet.createRow(rowCount);
+        titleRow.createCell((short) 0).setCellValue("Service Name");
+        titleRow.createCell((short) 1).setCellValue("Service Code");
+        titleRow.createCell((short) 2).setCellValue("Service Fee");
+        
+        ArrayList<String[]> services = dbHelper.getAllServices();
+        Iterator<String[]> servicesIterator = services.iterator();
+        while(servicesIterator.hasNext())
+        {
+            HSSFRow row = sheet.createRow((short)++rowCount);
+            String service[] = servicesIterator.next();
+            row.createCell((short) 0).setCellValue(service[0]);
+            row.createCell((short) 1).setCellValue(service[1]);
+            row.createCell((short) 2).setCellValue(service[2]);
+        }
+        
+        CellStyle style = hwb.createCellStyle();
+        org.apache.poi.ss.usermodel.Font f = hwb.createFont();
+        f.setBold(true);
+        style.setFont(f);
+        
+        for(int i = 0; i < 3; i++)
+        {
+            sheet.autoSizeColumn(i);
+            titleRow.getCell(i).setCellStyle(style);
+        }
+        
+        try (FileOutputStream fileOut = new FileOutputStream(filename)) 
+        {
+            hwb.write(fileOut);
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(ProviderTerminal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try 
+        {
+            Desktop.getDesktop().open(new File(filename));
+        } 
+        catch (IOException ex) 
+        {
+            Logger.getLogger(ProviderTerminal.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
     public static void createProviderTerminal(int providerID)
     {
         ProviderTerminal pt = new ProviderTerminal(providerID);
@@ -201,7 +265,7 @@ public class ProviderTerminal extends JFrame implements ActionListener, KeyListe
         }
         else if(ae.getSource().equals(generateProviderDirectoryButton))
         {
-            
+            createAndShowProviderDirectory();
         }
         else if(ae.getSource().equals(backToOperationChoiceButton))
         {
