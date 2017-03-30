@@ -38,21 +38,17 @@ public class Scheduler
         DatabaseHelper dbHelper = new DatabaseHelper();
         ScheduledExecutorService ses = Executors.newScheduledThreadPool(3);
         
-        try 
-        {
-            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate());
-        } 
-        catch (ParseException ex) 
-        {
-            Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
-        }
         
+        Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate());
+        Date endDate = new Date();
+        
+       
         ArrayList<Integer> members = dbHelper.getAllMembers();
         Iterator<Integer> memberIterator = members.iterator();
         while (memberIterator.hasNext())
         {
             Integer current = memberIterator.next();
-            MemberReport mr = new MemberReport(current, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
+            MemberReport mr = new MemberReport(current, startDate,endDate);
         }
         
         ArrayList<Integer> providers = dbHelper.getAllProviders();
@@ -60,7 +56,7 @@ public class Scheduler
         while (providerIterator.hasNext())
         {
             Integer current = providerIterator.next();
-            ProviderReport pr = new ProviderReport(current, new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate()), new Date());
+            ProviderReport pr = new ProviderReport(current, startDate, endDate);
         }
         
       
