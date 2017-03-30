@@ -16,10 +16,32 @@
  */
 package Terminal;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author vishc
  */
-public class Scheduler {
-    
+public class Scheduler 
+{
+    public static void generateReports()
+    {
+        ScheduledExecutorService ses = Executors.newScheduledThreadPool(3);
+        
+        try 
+        {
+            
+            Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate());
+        } 
+        catch (ParseException ex) 
+        {
+            Logger.getLogger(Scheduler.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 }
