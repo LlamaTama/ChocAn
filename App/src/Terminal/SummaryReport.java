@@ -41,6 +41,7 @@ public class SummaryReport
     private final Date currentDate;
     private final DatabaseHelper dbHelper = new DatabaseHelper();
     private int rowCount = 0;
+    private int providerCount = 0;
     private int totalConsultations = 0;
     private int totalFee = 0;
     
@@ -64,7 +65,6 @@ public class SummaryReport
         Iterator<Integer> providerIterator = providers.iterator();
         while(providerIterator.hasNext())
         {
-            rowCount++;
             int fee = 0;
             int consultations = 0;
             int id = providerIterator.next();
@@ -76,22 +76,20 @@ public class SummaryReport
                 fee += dbHelper.getServicePrice(serviceIterator.next());
             }
             
-            HSSFRow row = sheet.createRow((short)rowCount);
+            HSSFRow row = sheet.createRow((short)++rowCount);
             row.createCell((short) 0).setCellValue(dbHelper.getProviderName(id));
             row.createCell((short) 1).setCellValue("" + consultations);
             row.createCell((short) 2).setCellValue("" + fee);
             
             totalConsultations += consultations;
             totalFee += fee;
+            providerCount++;
         }
         
-        HSSFRow totalRow = sheet.createRow(rowCount);
-        totalRow.createCell((short) 0).setCellValue("Total");
-        totalRow.createCell(1);
-        totalRow.createCell((short) 2).setCellValue("" + totalConsultations);
-        totalRow.createCell(3);
-        totalRow.createCell(4);
-        totalRow.createCell((short) 5).setCellValue("" + totalFee);
+        HSSFRow totalRow = sheet.createRow(++rowCount);
+        totalRow.createCell((short) 0).setCellValue("Total = " + providerCount);
+        totalRow.createCell((short) 1).setCellValue("" + totalConsultations);
+        totalRow.createCell((short) 2).setCellValue("" + totalFee);
         
         CellStyle style = hwb.createCellStyle();
         Font f = hwb.createFont();
@@ -110,5 +108,10 @@ public class SummaryReport
         hwb.write(fileOut);
         fileOut.close();
         System.out.println("Your excel file has been generated!"); 
+    }
+    
+    public String getFileName()
+    {
+        return filename;
     }
 }
