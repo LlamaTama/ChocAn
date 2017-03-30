@@ -35,6 +35,7 @@ public class Initializer
     public static void main(String args[])
     {
         LoginTerminal.createLoginTerminal();
+        Scheduler.schedule();
     }
     
     public static Font getDefaultFont()
