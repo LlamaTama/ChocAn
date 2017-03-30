@@ -19,6 +19,7 @@ import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook; 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import java.io.*;  
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -36,6 +37,7 @@ public class MemberReport
     private final Date lastDate;
     private final Date currentDate;
     private int rowCount = 0;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
     
     //  name of excel file
     private final String filename;
@@ -45,7 +47,11 @@ public class MemberReport
         id = memID;
         lastDate = lDate;
         currentDate = cDate;
-        filename = Initializer.getHomeDirectory() + "\\Member Report - " + id + ".xls";
+        
+        //  database connection
+        DatabaseHelper dbHelper = new DatabaseHelper();
+        
+        filename = Initializer.getHomeDirectory() + "\\" + dbHelper.getMemberName(id) + " " + sdf.format(currentDate) + ".xls";
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
@@ -58,9 +64,6 @@ public class MemberReport
         rowhead.createCell((short) 3).setCellValue("State");
         rowhead.createCell((short) 4).setCellValue("City");
         rowhead.createCell((short) 5).setCellValue("Zip");
-        
-        //  database connection
-        DatabaseHelper dbHelper = new DatabaseHelper();
         
         ArrayList<String[]> memberDetails = dbHelper.getUserDetails(id, "member");
         Iterator<String []> memberIterator = memberDetails.iterator();
