@@ -348,7 +348,7 @@ public class DatabaseHelper
         
         try
         {
-            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<? order by \"Date of Service\"");
+            PreparedStatement ps = conn.prepareStatement("select * from app.appointment where \"Provider ID\"=? and \"Date of Service\">=? and \"Date of Service\"<? order by \"Current Date\"");
             ps.setInt(1, id);
             ps.setDate(2, lDate);
             ps.setDate(3, cDate);
