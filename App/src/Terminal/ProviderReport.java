@@ -19,6 +19,7 @@ package Terminal;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -40,6 +41,7 @@ public class ProviderReport
     private int rowCount = 0;
     private int consultations = 0;
     private int totalFee = 0;
+    private final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
     
     //  name of excel file
     private final String filename;
@@ -49,13 +51,14 @@ public class ProviderReport
         id = provID;
         lastDate = lDate;
         currentDate = cDate;
-        filename = Initializer.getHomeDirectory() + "\\Provider Report - " + id + ".xls";
-        
-        HSSFWorkbook hwb = new HSSFWorkbook();
-        HSSFSheet sheet = hwb.createSheet("Weekly Report");
         
         //  database connection
         DatabaseHelper dbHelper = new DatabaseHelper();
+        
+        filename = Initializer.getHomeDirectory() + "\\" + dbHelper.getProviderName(id) + " " + sdf.format(currentDate) + ".xls";
+        
+        HSSFWorkbook hwb = new HSSFWorkbook();
+        HSSFSheet sheet = hwb.createSheet("Weekly Report");
         
         ArrayList<String[]> providerDetails = dbHelper.getUserDetails(id, "provider");
         Iterator<String []> providerIterator = providerDetails.iterator();
