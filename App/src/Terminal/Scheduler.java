@@ -16,16 +16,17 @@
  */
 package Terminal;
 
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import java.util.Locale;
+import java.util.Properties;
 
 /**
  *
@@ -33,16 +34,14 @@ import java.util.logging.Logger;
  */
 public class Scheduler 
 {
-    public static void generateReports() throws ParseException, IOException
+    private static final SimpleDateFormat sdf = new SimpleDateFormat("MM-dd-yyyy");
+    private static final DatabaseHelper dbHelper = new DatabaseHelper();
+    
+    private static void generateReports() throws ParseException, IOException
     {
-        DatabaseHelper dbHelper = new DatabaseHelper();
-        ScheduledExecutorService ses = Executors.newScheduledThreadPool(3);
-        
-        
-        Date startDate = new SimpleDateFormat("yyyy-MM-dd").parse(Initializer.getLastRunDate());
+        Date startDate = sdf.parse(Initializer.getLastRunDate());
         Date endDate = new Date();
         
-       
         ArrayList<Integer> members = dbHelper.getAllMembers();
         Iterator<Integer> memberIterator = members.iterator();
         while (memberIterator.hasNext())
@@ -59,8 +58,45 @@ public class Scheduler
             ProviderReport pr = new ProviderReport(current, startDate, endDate);
         }
         
-      
+        SummaryReport sr = new SummaryReport(startDate, endDate);
         
+        Properties p = new Properties();
         
+        try
+        {
+            FileOutputStream fos = new FileOutputStream("src\\Resources\\config.properties");
+            
+            p.setProperty("lastRun", sdf.format(new Date()));
+            
+            p.store(fos, null);
+        }
+        catch(IOException ioe)
+        {
+            System.out.println(ioe);
+        }
+    }
+    
+    public static void schedule() throws ParseException, IOException
+    {
+        try
+        {
+            while(true)
+            {
+                Calendar c = new GregorianCalendar(Locale.CANADA);
+                int currentHour = c.get(Calendar.HOUR_OF_DAY);
+                int currentDay = c.get(Calendar.DAY_OF_WEEK);
+                
+                if(currentHour==0 && currentDay==5)
+                {
+                    generateReports();
+                }
+                
+                Thread.sleep(60000);
+            }
+        }
+        catch(InterruptedException ie)
+        {
+            System.out.println(ie);
+        }
     }
 }
