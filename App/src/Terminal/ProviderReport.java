@@ -49,7 +49,7 @@ public class ProviderReport
         id = provID;
         lastDate = lDate;
         currentDate = cDate;
-        filename = "Reports\\Provider Report - " + id + ".xls";
+        filename = Initializer.getHomeDirectory() + "\\Provider Report - " + id + ".xls";
         
         HSSFWorkbook hwb = new HSSFWorkbook();
         HSSFSheet sheet = hwb.createSheet("Weekly Report");
