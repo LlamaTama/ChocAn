@@ -18,8 +18,10 @@
 package Terminal;
 
 import java.awt.Font;
+import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Date;
 import java.util.Properties;
 
@@ -58,9 +60,9 @@ public class Initializer
         
         try
         {
-            FileInputStream fis = new FileInputStream("src\\Resources\\config.properties");
+            BufferedReader propertiesReader = new BufferedReader(new InputStreamReader(Initializer.class.getClassLoader().getResourceAsStream("Resources/config.properties")));
             
-            p.load(fis);
+            p.load(propertiesReader);
             
             lastRun = p.getProperty("lastRun");
         }
